@@ -7,6 +7,7 @@ const nextConfig = {
       "raw.githubusercontent.com",
       "via.placeholder.com",
       "images.beta.cosmos.so",
+      "hebbkx1anhila5yf.public.blob.vercel-storage.com"
     ],
   },
 
