@@ -12,6 +12,7 @@ interface ShaderBackgroundProps {
 export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isActive, setIsActive] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
   const [themeColors, setThemeColors] = useState({
     background: '#000000',
     primary: '#ff6b35',
@@ -19,6 +20,11 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     muted: '#333333',
     foreground: '#ffffff'
   })
+
+  // Performance optimization: Only mount shaders after component is ready
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   useEffect(() => {
     // Get CSS custom properties from the document
@@ -57,16 +63,26 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   }, [])
 
   useEffect(() => {
-    const handleMouseEnter = () => setIsActive(true)
-    const handleMouseLeave = () => setIsActive(false)
+    // Throttle mouse events to improve performance
+    let mouseTimeout: NodeJS.Timeout;
+    
+    const handleMouseEnter = () => {
+      clearTimeout(mouseTimeout);
+      setIsActive(true);
+    };
+    
+    const handleMouseLeave = () => {
+      mouseTimeout = setTimeout(() => setIsActive(false), 300);
+    };
 
     const container = containerRef.current
     if (container) {
-      container.addEventListener("mouseenter", handleMouseEnter)
-      container.addEventListener("mouseleave", handleMouseLeave)
+      container.addEventListener("mouseenter", handleMouseEnter, { passive: true })
+      container.addEventListener("mouseleave", handleMouseLeave, { passive: true })
     }
 
     return () => {
+      clearTimeout(mouseTimeout);
       if (container) {
         container.removeEventListener("mouseenter", handleMouseEnter)
         container.removeEventListener("mouseleave", handleMouseLeave)
@@ -133,20 +149,21 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         </defs>
       </svg>
 
-      {/* Background Shaders */}
-      <MeshGradient
-        className="absolute inset-0 w-full h-full"
-        colors={gradientColors}
-        speed={isActive ? 0.5 : 0.3}
-        backgroundColor={convertColor(themeColors.background)}
-      />
-      <MeshGradient
-        className="absolute inset-0 w-full h-full opacity-60"
-        colors={wireframeColors}
-        speed={isActive ? 0.3 : 0.2}
-        wireframe="true"
-        backgroundColor="transparent"
-      />
+      {/* Background Shaders - Only render when mounted and for performance */}
+      {isMounted && (
+        <>
+          <MeshGradient
+            className="absolute inset-0 w-full h-full"
+            colors={gradientColors}
+            speed={isActive ? 0.2 : 0.1}
+          />
+          <MeshGradient
+            className="absolute inset-0 w-full h-full opacity-30"
+            colors={wireframeColors}
+            speed={isActive ? 0.15 : 0.05}
+          />
+        </>
+      )}
 
       {children}
     </div>

@@ -25,6 +25,27 @@ const VideoWithPlaceholder = ({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+
+  // Intersection observer for lazy loading
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const video = videoRef.current;
+    if (video) {
+      observer.observe(video);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development" && !placeholder) {
@@ -35,7 +56,7 @@ const VideoWithPlaceholder = ({
   useEffect(() => {
     const video = videoRef.current;
     
-    if (video) {
+    if (video && isInView) {
       const handleLoadedData = () => {
         setVideoLoaded(true);
         setHasError(false);
@@ -64,7 +85,7 @@ const VideoWithPlaceholder = ({
       video.setAttribute('playsinline', 'true');
       video.setAttribute('webkit-playsinline', 'true');
       
-      // Start loading immediately
+      // Start loading only when in view
       video.load();
       
       if (video.readyState >= 2) {
@@ -78,7 +99,7 @@ const VideoWithPlaceholder = ({
         video.removeEventListener("loadstart", handleLoadStart);
       };
     }
-  }, [src]);
+  }, [src, isInView]);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -107,7 +128,7 @@ const VideoWithPlaceholder = ({
           fill
         />
       )}
-      {!hasError && (
+      {!hasError && isInView && (
         <video
           ref={videoRef}
           src={src}
@@ -115,7 +136,7 @@ const VideoWithPlaceholder = ({
           playsInline
           loop
           controls={false}
-          preload="metadata"
+          preload="none"
           disablePictureInPicture
           disableRemotePlayback
           className={cn(className, { 
@@ -143,6 +164,7 @@ export const Background = ({
   const extension = getFileExtension(src);
   const isVideoFile = isVideo(extension);
 
+  console.log(isVideoFile)
   const classNames =
     "absolute bg-background left-0 top-0 w-full h-full object-cover rounded-[42px] md:rounded-[72px] will-change-transform";
 

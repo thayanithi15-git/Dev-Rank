@@ -1,24 +1,38 @@
 "use client"
 
 import { motion } from "framer-motion"
-import type { HTMLAttributes, ReactNode } from "react"
+import type { ReactNode } from "react"
+import { memo } from "react"
 
-interface AnimatedSectionProps extends HTMLAttributes<HTMLDivElement> {
+interface AnimatedSectionProps {
   children: ReactNode
   delay?: number
+  className?: string
+  id?: string
 }
 
-export function AnimatedSection({ children, className, delay = 0, ...props }: AnimatedSectionProps) {
+export const AnimatedSection = memo(function AnimatedSection({ 
+  children, 
+  className, 
+  delay = 0,
+  id,
+  ...props 
+}: AnimatedSectionProps) {
   return (
     <motion.div
+      id={id}
       initial={{ opacity: 0, y: 20, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8, ease: [0.33, 1, 0.68, 1], delay }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ 
+        duration: 0.6, 
+        ease: [0.25, 0.46, 0.45, 0.94], 
+        delay 
+      }}
       className={className}
       {...props}
     >
       {children}
     </motion.div>
   )
-}
+})
