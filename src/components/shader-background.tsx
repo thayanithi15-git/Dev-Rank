@@ -12,6 +12,49 @@ interface ShaderBackgroundProps {
 export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isActive, setIsActive] = useState(false)
+  const [themeColors, setThemeColors] = useState({
+    background: '#000000',
+    primary: '#ff6b35',
+    accent: '#ff8c42',
+    muted: '#333333',
+    foreground: '#ffffff'
+  })
+
+  useEffect(() => {
+    // Get CSS custom properties from the document
+    const updateThemeColors = () => {
+      const root = document.documentElement
+      const computedStyle = getComputedStyle(root)
+
+      setThemeColors({
+        background: computedStyle.getPropertyValue('--background').trim() || '#000000',
+        primary: computedStyle.getPropertyValue('--primary').trim() || '#ff6b35',
+        accent: computedStyle.getPropertyValue('--accent').trim() || '#ff8c42',
+        muted: computedStyle.getPropertyValue('--muted').trim() || '#333333',
+        foreground: computedStyle.getPropertyValue('--foreground').trim() || '#ffffff'
+      })
+    }
+
+    // Update colors on mount
+    updateThemeColors()
+
+    // Listen for theme changes (if you have a theme switcher)
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' &&
+          (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme')) {
+          setTimeout(updateThemeColors, 100) // Small delay to ensure CSS is applied
+        }
+      })
+    })
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme']
+    })
+
+    return () => observer.disconnect()
+  }, [])
 
   useEffect(() => {
     const handleMouseEnter = () => setIsActive(true)
@@ -31,8 +74,37 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     }
   }, [])
 
+  // Convert oklch colors to hex if needed
+  const convertColor = (color: string): string => {
+    if (color.startsWith('oklch(')) {
+      // For now, return fallback colors for oklch values
+      // In a real implementation, you might want to use a color conversion library
+      if (color.includes('0.65 0.15 45')) return '#ff6b35' // Primary orange
+      if (color.includes('0.7 0.12 35')) return '#ff8c42'  // Accent orange
+      if (color.includes('0.08 0 0')) return '#141414'     // Dark background
+      if (color.includes('0.95 0 0')) return '#f5f5f5'     // Light foreground
+      return '#ff6b35' // Default orange
+    }
+    return color || '#ff6b35'
+  }
+
+  const gradientColors = [
+    convertColor(themeColors.background),
+    convertColor(themeColors.primary),
+    convertColor(themeColors.accent),
+    convertColor(themeColors.muted),
+    convertColor(themeColors.foreground)
+  ]
+
+  const wireframeColors = [
+    convertColor(themeColors.background),
+    convertColor(themeColors.foreground),
+    convertColor(themeColors.primary),
+    convertColor(themeColors.background)
+  ]
+
   return (
-    <div ref={containerRef} className="min-h-screen bg-black relative overflow-hidden">
+    <div ref={containerRef} className="min-h-screen bg-background relative overflow-hidden">
       {/* SVG Filters */}
       <svg className="absolute inset-0 w-0 h-0">
         <defs>
@@ -64,14 +136,14 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
       {/* Background Shaders */}
       <MeshGradient
         className="absolute inset-0 w-full h-full"
-        colors={["#000000", "#8b5cf6", "#ffffff", "#1e1b4b", "#4c1d95"]}
-        speed={0.3}
-        backgroundColor="#000000"
+        colors={gradientColors}
+        speed={isActive ? 0.5 : 0.3}
+        backgroundColor={convertColor(themeColors.background)}
       />
       <MeshGradient
         className="absolute inset-0 w-full h-full opacity-60"
-        colors={["#000000", "#ffffff", "#8b5cf6", "#000000"]}
-        speed={0.2}
+        colors={wireframeColors}
+        speed={isActive ? 0.3 : 0.2}
         wireframe="true"
         backgroundColor="transparent"
       />

@@ -9,7 +9,7 @@ interface BlurPanelProps {
 export function BlurPanel({ children, className }: BlurPanelProps) {
   return (
     <div
-      className={cn("bg-black/60 backdrop-blur-md rounded-2xl will-change-transform block w-fit mx-auto", className)}
+      className={cn("bg-black/60 border backdrop-blur-md rounded-2xl will-change-transform block w-fit mx-auto", className)}
       role="region"
     >
       {children}
