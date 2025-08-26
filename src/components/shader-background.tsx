@@ -29,7 +29,8 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
 
   // Performance optimization: Only mount shaders after component is ready
   useEffect(() => {
-    setIsMounted(true)
+    const timer = setTimeout(() => setIsMounted(true), 100)
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
@@ -38,13 +39,26 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
       const root = document.documentElement
       const computedStyle = getComputedStyle(root)
 
-      setThemeColors({
-        background: computedStyle.getPropertyValue('--background').trim() || '#000000',
-        primary: computedStyle.getPropertyValue('--primary').trim() || '#ff6b35',
-        accent: computedStyle.getPropertyValue('--accent').trim() || '#ff8c42',
-        muted: computedStyle.getPropertyValue('--muted').trim() || '#333333',
-        foreground: computedStyle.getPropertyValue('--foreground').trim() || '#ffffff'
-      })
+      // Helper function to get CSS variable with fallbacks
+      const getCSSVar = (varName: string, fallback: string) => {
+        const value = computedStyle.getPropertyValue(varName).trim()
+        return value || fallback
+      }
+
+      const newColors = {
+        background: getCSSVar('--background', '#000000'),
+        primary: getCSSVar('--primary', '#ff6b35'),
+        accent: getCSSVar('--accent', '#ff8c42'),
+        muted: getCSSVar('--muted', '#333333'),
+        foreground: getCSSVar('--foreground', '#ffffff')
+      }
+
+      setThemeColors(newColors)
+      
+      // Debug log in development
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Theme colors updated:', newColors)
+      }
     }
 
     // Update colors on mount
@@ -96,39 +110,68 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     }
   }, [])
 
-  // Convert oklch colors to hex if needed
+  // Convert oklch colors to hex
   const convertColor = (color: string): string => {
+    if (!color) return '#000000'
+    
+    // If it's already a hex color, return it
+    if (color.startsWith('#')) return color
+    
+    // If it's an oklch color, convert it to a more appropriate color
     if (color.startsWith('oklch(')) {
-      // For now, return fallback colors for oklch values
-      // In a real implementation, you might want to use a color conversion library
-      if (color.includes('0.65 0.15 45')) return '#ff6b35' // Primary orange
-      if (color.includes('0.7 0.12 35')) return '#ff8c42'  // Accent orange
-      if (color.includes('0.08 0 0')) return '#141414'     // Dark background
-      if (color.includes('0.95 0 0')) return '#f5f5f5'     // Light foreground
-      return '#ff6b35' // Default orange
+      // Extract the lightness value from oklch
+      const match = color.match(/oklch\(([\d.]+)\s+([\d.]+)\s+([\d.]+)\)/)
+      if (match) {
+        const lightness = parseFloat(match[1])
+        const chroma = parseFloat(match[2])
+        const hue = parseFloat(match[3])
+        
+        // Convert based on lightness and context
+        if (lightness < 0.2) {
+          // Very dark colors - use dark grays/blacks
+          return lightness < 0.1 ? '#000000' : '#1a1a1a'
+        } else if (lightness > 0.9) {
+          // Very light colors - use light grays/whites
+          return lightness > 0.98 ? '#ffffff' : '#f5f5f5'
+        } else if (chroma > 0.1) {
+          // Colors with high chroma - these are the orange/accent colors
+          if (hue >= 35 && hue <= 55) {
+            // Orange range - adjust based on lightness
+            if (lightness > 0.7) return '#ff8c42'  // Light orange
+            else if (lightness > 0.6) return '#ff6b35'  // Medium orange
+            else return '#e55a2b'  // Darker orange
+          }
+        }
+        
+        // For low chroma colors (grays), use appropriate gray scale
+        const grayValue = Math.round(lightness * 255)
+        return `rgb(${grayValue}, ${grayValue}, ${grayValue})`
+      }
     }
-    return color || '#ff6b35'
+    
+    // Fallback for other color formats
+    return color.startsWith('rgb') ? color : '#000000'
   }
 
   const gradientColors = [
     convertColor(themeColors.background),
+    convertColor(themeColors.muted),
     convertColor(themeColors.primary),
     convertColor(themeColors.accent),
-    convertColor(themeColors.muted),
-    convertColor(themeColors.foreground)
+    convertColor(themeColors.background)
   ]
 
   const wireframeColors = [
     convertColor(themeColors.background),
+    convertColor(themeColors.muted),
     convertColor(themeColors.foreground),
-    convertColor(themeColors.primary),
     convertColor(themeColors.background)
   ]
 
   return (
     <div ref={containerRef} className="min-h-screen bg-background relative overflow-hidden">
       {/* Fallback gradient background for when shaders are loading */}
-      <div className="absolute inset-0 w-full h-full to-slate-900 opacity-50" />
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-background via-muted to-background opacity-80" />
       
       {/* SVG Filters */}
       <svg className="absolute inset-0 w-0 h-0">
@@ -167,7 +210,7 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
             speed={isActive ? 0.2 : 0.1}
           />
           <MeshGradient
-            className="absolute inset-0 w-full h-full opacity-30"
+            className="absolute inset-0 w-full h-full opacity-20"
             colors={wireframeColors}
             speed={isActive ? 0.15 : 0.05}
           />
