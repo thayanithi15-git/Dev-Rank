@@ -95,6 +95,7 @@ export default function ShaderShowcase() {
 
         <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16" delay={0.2}>
           <FooterSection />
+          
         </AnimatedSection>
       </div>
     </div>
