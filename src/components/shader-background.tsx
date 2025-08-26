@@ -20,11 +20,11 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const [isActive, setIsActive] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [themeColors, setThemeColors] = useState({
-    background: '#000000',
-    primary: '#ff6b35',
+    background: '#fefefe',
+    primary: '#e55a2b',
     accent: '#ff8c42',
-    muted: '#333333',
-    foreground: '#ffffff'
+    muted: '#f0f0f0',
+    foreground: '#1a1a1a'
   })
 
   // Performance optimization: Only mount shaders after component is ready
@@ -34,44 +34,80 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   }, [])
 
   useEffect(() => {
-    // Get CSS custom properties from the document
     const updateThemeColors = () => {
-      const root = document.documentElement
-      const computedStyle = getComputedStyle(root)
+      // Wait for next tick to ensure styles are computed
+      requestAnimationFrame(() => {
+        const root = document.documentElement
+        const computedStyle = getComputedStyle(root)
 
-      // Helper function to get CSS variable with fallbacks
-      const getCSSVar = (varName: string, fallback: string) => {
-        const value = computedStyle.getPropertyValue(varName).trim()
-        return value || fallback
-      }
+        // Helper function to get CSS variable with fallbacks
+        const getCSSVar = (varName: string, fallback: string) => {
+          const value = computedStyle.getPropertyValue(varName).trim()
+          return value || fallback
+        }
 
-      const newColors = {
-        background: getCSSVar('--background', '#000000'),
-        primary: getCSSVar('--primary', '#ff6b35'),
-        accent: getCSSVar('--accent', '#ff8c42'),
-        muted: getCSSVar('--muted', '#333333'),
-        foreground: getCSSVar('--foreground', '#ffffff')
-      }
+        // Check if we're in dark mode
+        const isDark = document.documentElement.classList.contains('dark') ||
+                      document.documentElement.getAttribute('data-theme') === 'dark'
 
-      setThemeColors(newColors)
-      
-      // Debug log in development
-      if (process.env.NODE_ENV === 'development') {
-        console.log('Theme colors updated:', newColors)
-      }
+        // Provide better fallbacks based on theme
+        const lightDefaults = {
+          background: '#fefefe',
+          primary: '#e55a2b',
+          accent: '#ff8c42',
+          muted: '#f0f0f0',
+          foreground: '#1a1a1a'
+        }
+
+        const darkDefaults = {
+          background: '#0a0a0a',
+          primary: '#ff6b35',
+          accent: '#ff8c42',
+          muted: '#2a2a2a',
+          foreground: '#ffffff'
+        }
+
+        const defaults = isDark ? darkDefaults : lightDefaults
+
+        const newColors = {
+          background: getCSSVar('--background', defaults.background),
+          primary: getCSSVar('--primary', defaults.primary),
+          accent: getCSSVar('--accent', defaults.accent),
+          muted: getCSSVar('--muted', defaults.muted),
+          foreground: getCSSVar('--foreground', defaults.foreground)
+        }
+
+        // Convert OKLCH colors to hex if needed
+        Object.keys(newColors).forEach(key => {
+          newColors[key] = convertOklchToHex(newColors[key])
+        })
+
+        setThemeColors(newColors)
+        
+        // Debug log in development
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Theme colors updated:', newColors)
+          console.log('Is dark mode:', isDark)
+        }
+      })
     }
 
-    // Update colors on mount
-    updateThemeColors()
+    // Initial update with a delay to ensure CSS is loaded
+    const initialTimer = setTimeout(updateThemeColors, 200)
 
-    // Listen for theme changes (if you have a theme switcher)
+    // Listen for theme changes
     const observer = new MutationObserver((mutations) => {
+      let shouldUpdate = false
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' &&
           (mutation.attributeName === 'class' || mutation.attributeName === 'data-theme')) {
-          setTimeout(updateThemeColors, 100) // Small delay to ensure CSS is applied
+          shouldUpdate = true
         }
       })
+      
+      if (shouldUpdate) {
+        setTimeout(updateThemeColors, 100)
+      }
     })
 
     observer.observe(document.documentElement, {
@@ -79,7 +115,15 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
       attributeFilter: ['class', 'data-theme']
     })
 
-    return () => observer.disconnect()
+    // Listen for CSS load events (in case styles are loaded after component mount)
+    const handleLoad = () => updateThemeColors()
+    window.addEventListener('load', handleLoad)
+
+    return () => {
+      clearTimeout(initialTimer)
+      observer.disconnect()
+      window.removeEventListener('load', handleLoad)
+    }
   }, [])
 
   useEffect(() => {
@@ -110,62 +154,75 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     }
   }, [])
 
-  // Convert oklch colors to hex
-  const convertColor = (color: string): string => {
+  // Enhanced OKLCH to hex conversion
+  const convertOklchToHex = (color: string): string => {
     if (!color) return '#000000'
     
     // If it's already a hex color, return it
     if (color.startsWith('#')) return color
     
-    // If it's an oklch color, convert it to a more appropriate color
-    if (color.startsWith('oklch(')) {
-      // Extract the lightness value from oklch
+    // If it's an RGB color, convert to hex
+    if (color.startsWith('rgb')) {
+      const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/)
+      if (match) {
+        const r = parseInt(match[1]).toString(16).padStart(2, '0')
+        const g = parseInt(match[2]).toString(16).padStart(2, '0')
+        const b = parseInt(match[3]).toString(16).padStart(2, '0')
+        return `#${r}${g}${b}`
+      }
+    }
+    
+    // If it's an oklch color, convert it to hex
+    if (color.includes('oklch(')) {
       const match = color.match(/oklch\(([\d.]+)\s+([\d.]+)\s+([\d.]+)\)/)
       if (match) {
         const lightness = parseFloat(match[1])
         const chroma = parseFloat(match[2])
         const hue = parseFloat(match[3])
         
-        // Convert based on lightness and context
-        if (lightness < 0.2) {
-          // Very dark colors - use dark grays/blacks
-          return lightness < 0.1 ? '#000000' : '#1a1a1a'
-        } else if (lightness > 0.9) {
-          // Very light colors - use light grays/whites
-          return lightness > 0.98 ? '#ffffff' : '#f5f5f5'
-        } else if (chroma > 0.1) {
-          // Colors with high chroma - these are the orange/accent colors
-          if (hue >= 35 && hue <= 55) {
-            // Orange range - adjust based on lightness
-            if (lightness > 0.7) return '#ff8c42'  // Light orange
-            else if (lightness > 0.6) return '#ff6b35'  // Medium orange
-            else return '#e55a2b'  // Darker orange
-          }
-        }
-        
-        // For low chroma colors (grays), use appropriate gray scale
-        const grayValue = Math.round(lightness * 255)
-        return `rgb(${grayValue}, ${grayValue}, ${grayValue})`
+        // Simplified OKLCH to RGB conversion
+        return oklchToHex(lightness, chroma, hue)
       }
     }
     
-    // Fallback for other color formats
-    return color.startsWith('rgb') ? color : '#000000'
+    // Fallback
+    return color.startsWith('#') ? color : '#000000'
+  }
+
+  // Simplified OKLCH to hex conversion function
+  const oklchToHex = (l: number, c: number, h: number): string => {
+    // Very simplified conversion - you might want to use a proper color library
+    if (l < 0.1) return '#000000'
+    if (l > 0.95) return '#ffffff'
+    
+    if (c > 0.1) {
+      // High chroma colors - likely your orange theme colors
+      if (h >= 30 && h <= 60) {
+        if (l > 0.7) return '#ff8c42'  // Light orange
+        if (l > 0.6) return '#ff6b35'  // Medium orange  
+        return '#e55a2b'  // Darker orange
+      }
+    }
+    
+    // Low chroma colors - grays
+    const gray = Math.round(l * 255)
+    const hex = gray.toString(16).padStart(2, '0')
+    return `#${hex}${hex}${hex}`
   }
 
   const gradientColors = [
-    convertColor(themeColors.background),
-    convertColor(themeColors.muted),
-    convertColor(themeColors.primary),
-    convertColor(themeColors.accent),
-    convertColor(themeColors.background)
+    themeColors.background,
+    themeColors.muted,
+    themeColors.primary,
+    themeColors.accent,
+    themeColors.background
   ]
 
   const wireframeColors = [
-    convertColor(themeColors.background),
-    convertColor(themeColors.muted),
-    convertColor(themeColors.foreground),
-    convertColor(themeColors.background)
+    themeColors.background,
+    themeColors.muted,
+    themeColors.foreground,
+    themeColors.background
   ]
 
   return (
