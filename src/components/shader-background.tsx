@@ -3,7 +3,13 @@
 import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
-import { MeshGradient } from "@paper-design/shaders-react"
+import dynamic from "next/dynamic"
+
+// Dynamically import MeshGradient with no SSR
+const MeshGradient = dynamic(
+  () => import("@paper-design/shaders-react").then((mod) => mod.MeshGradient),
+  { ssr: false }
+)
 
 interface ShaderBackgroundProps {
   children: React.ReactNode
@@ -121,6 +127,9 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
 
   return (
     <div ref={containerRef} className="min-h-screen bg-background relative overflow-hidden">
+      {/* Fallback gradient background for when shaders are loading */}
+      <div className="absolute inset-0 w-full h-full to-slate-900 opacity-50" />
+      
       {/* SVG Filters */}
       <svg className="absolute inset-0 w-0 h-0">
         <defs>
@@ -149,8 +158,8 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         </defs>
       </svg>
 
-      {/* Background Shaders - Only render when mounted and for performance */}
-      {isMounted && (
+      {/* Background Shaders - Only render when mounted and on client side */}
+      {isMounted && typeof window !== 'undefined' && (
         <>
           <MeshGradient
             className="absolute inset-0 w-full h-full"
