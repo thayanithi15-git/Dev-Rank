@@ -20,12 +20,12 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const [isActive, setIsActive] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const [themeColors, setThemeColors] = useState({
-    background: '#fefefe',
-    primary: '#e55a2b',
-    accent: '#ff8c42',
-    muted: '#f0f0f0',
-    foreground: '#1a1a1a'
-  })
+          background: '#020202',
+          primary: '#f77036',
+          accent: '#fd8965',
+          muted: '#0b0b0b',
+          foreground: '#eeeeee'
+        })
 
   // Performance optimization: Only mount shaders after component is ready
   useEffect(() => {
