@@ -18,13 +18,7 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isActive, setIsActive] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
-  const [colors, setColors] = useState({
-    background: '#020202',
-    foreground: '#eeeeee',
-    primary: '#f77036',
-    accent: '#fd8965',
-    muted: '#0b0b0b'
-  })
+  const [isDark, setIsDark] = useState(false)
 
   // Performance optimization: Only mount shaders after component is ready
   useEffect(() => {
@@ -32,96 +26,47 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     return () => clearTimeout(timer)
   }, [])
 
-  // Get computed CSS colors and convert OKLCH to hex
+  // Robust theme detection for production
   useEffect(() => {
-    const updateColors = () => {
+    const updateTheme = () => {
       if (typeof window === 'undefined') return
       
-      const style = getComputedStyle(document.documentElement)
-      const isDark = document.documentElement.classList.contains('dark')
+      // Multiple ways to detect dark mode for reliability
+      const htmlEl = document.documentElement
+      const darkClass = htmlEl.classList.contains('dark')
+      const darkAttr = htmlEl.getAttribute('data-theme') === 'dark'
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)').matches
       
-      // Fallback colors based on theme
-      const fallbacks = isDark ? {
-        background: '#020202',
-        foreground: '#eeeeee', 
-        primary: '#f77036',
-        accent: '#fd8965',
-        muted: '#0b0b0b'
-      } : {
-        background: '#fefefe',
-        foreground: '#1a1a1a',
-        primary: '#ff6b35', 
-        accent: '#ff8c42',
-        muted: '#f0f0f0'
-      }
+      // Use class first, then attribute, then media query as fallback
+      const newIsDark = darkClass || darkAttr || (!darkClass && !darkAttr && mediaQuery)
       
-      const convertOklchToHex = (oklchValue: string, fallback: string): string => {
-        if (!oklchValue || oklchValue.trim() === '') return fallback
-        
-        // If it's already a hex color, return it
-        if (oklchValue.startsWith('#')) return oklchValue
-        
-        // Parse OKLCH values
-        const match = oklchValue.match(/oklch\(([^)]+)\)/)
-        if (!match) return fallback
-        
-        const values = match[1].split(' ').map(v => parseFloat(v.trim()))
-        if (values.length < 3) return fallback
-        
-        const [l, c, h] = values
-        
-        // Convert specific OKLCH values to known hex colors
-        // Background colors
-        if (l <= 0.1 && c <= 0.02) return isDark ? '#020202' : '#fefefe'
-        if (l >= 0.95 && c <= 0.02) return isDark ? '#eeeeee' : '#1a1a1a'
-        
-        // Orange primary colors (around hue 42-45)
-        if (c >= 0.15 && h >= 40 && h <= 50) {
-          if (l >= 0.7) return isDark ? '#f77036' : '#ff6b35'
-          if (l >= 0.65) return '#ff6b35'
-          return '#e55a2b'
-        }
-        
-        // Orange accent colors (around hue 35-40) 
-        if (c >= 0.12 && h >= 30 && h <= 40) {
-          if (l >= 0.75) return isDark ? '#fd8965' : '#ff8c42'
-          return '#ff7043'
-        }
-        
-        // Muted colors (low chroma)
-        if (c <= 0.05) {
-          if (l <= 0.15) return isDark ? '#0b0b0b' : '#f0f0f0'
-          if (l >= 0.9) return isDark ? '#f0f0f0' : '#0b0b0b'
-          const intensity = Math.round(l * 255)
-          const hex = intensity.toString(16).padStart(2, '0')
-          return `#${hex}${hex}${hex}`
-        }
-        
-        return fallback
-      }
-      
-      setColors({
-        background: convertOklchToHex(style.getPropertyValue('--background'), fallbacks.background),
-        foreground: convertOklchToHex(style.getPropertyValue('--foreground'), fallbacks.foreground),
-        primary: convertOklchToHex(style.getPropertyValue('--primary'), fallbacks.primary),
-        accent: convertOklchToHex(style.getPropertyValue('--accent'), fallbacks.accent),
-        muted: convertOklchToHex(style.getPropertyValue('--muted'), fallbacks.muted)
-      })
+      setIsDark(newIsDark)
     }
 
-    // Initial update with delay to ensure CSS is loaded
-    setTimeout(updateColors, 200)
+    // Initial theme detection with multiple attempts for production
+    updateTheme()
+    setTimeout(updateTheme, 100)
+    setTimeout(updateTheme, 500)
     
     // Listen for theme changes
     const observer = new MutationObserver(() => {
-      setTimeout(updateColors, 100)
+      setTimeout(updateTheme, 50)
     })
+    
     observer.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ['class', 'data-theme']
+      attributeFilter: ['class', 'data-theme', 'style']
     })
 
-    return () => observer.disconnect()
+    // Also listen to system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleMediaChange = () => setTimeout(updateTheme, 50)
+    mediaQuery.addEventListener('change', handleMediaChange)
+
+    return () => {
+      observer.disconnect()
+      mediaQuery.removeEventListener('change', handleMediaChange)
+    }
   }, [])
 
   useEffect(() => {
@@ -152,7 +97,27 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     }
   }, [])
 
-  // Color arrays using the computed CSS values
+  // Static color definitions that match your CSS exactly
+  const lightTheme = {
+    background: '#fefefe',
+    foreground: '#262626', 
+    primary: '#ff6b35',
+    accent: '#ff8c42',
+    muted: '#f0f0f0'
+  }
+
+  const darkTheme = {
+    background: '#141414',
+    foreground: '#f3f3f3',
+    primary: '#f77036', 
+    accent: '#fd8965',
+    muted: '#1f1f1f'
+  }
+
+  // Use theme-appropriate colors
+  const colors = isDark ? darkTheme : lightTheme
+
+  // Color arrays using the theme colors
   const gradientColors = [
     colors.background,
     colors.muted,
