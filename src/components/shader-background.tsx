@@ -50,45 +50,64 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         const isDark = document.documentElement.classList.contains('dark') ||
                       document.documentElement.getAttribute('data-theme') === 'dark'
 
-        // Provide better fallbacks based on theme
-        const lightDefaults = {
+        // Provide better fallbacks based on theme with more reliable detection
+        const lightTheme = {
           background: '#fefefe',
-          primary: '#e55a2b',
+          primary: '#ff6b35',
           accent: '#ff8c42',
           muted: '#f0f0f0',
           foreground: '#1a1a1a'
         }
 
-        const darkDefaults = {
+        const darkTheme = {
           background: '#0a0a0a',
-          primary: '#ff6b35',
+          primary: '#ff7043',
           accent: '#ff8c42',
           muted: '#2a2a2a',
           foreground: '#ffffff'
         }
 
-        const defaults = isDark ? darkDefaults : lightDefaults
-
-        const newColors = {
-          background: getCSSVar('--background', defaults.background),
-          primary: getCSSVar('--primary', defaults.primary),
-          accent: getCSSVar('--accent', defaults.accent),
-          muted: getCSSVar('--muted', defaults.muted),
-          foreground: getCSSVar('--foreground', defaults.foreground)
+        // First try to get CSS variables, fallback to theme-appropriate defaults
+        let newColors = isDark ? { ...darkTheme } : { ...lightTheme }
+        
+        // Try to read CSS variables (might fail in production)
+        try {
+          const cssVars = {
+            background: getCSSVar('--background', ''),
+            primary: getCSSVar('--primary', ''),
+            accent: getCSSVar('--accent', ''),
+            muted: getCSSVar('--muted', ''),
+            foreground: getCSSVar('--foreground', '')
+          }
+          
+          // Only use CSS variables if they're actually available
+          Object.keys(cssVars).forEach(key => {
+            const colorKey = key as keyof typeof newColors
+            if (cssVars[colorKey] && cssVars[colorKey].trim() !== '') {
+              newColors[colorKey] = cssVars[colorKey]
+            }
+          })
+        } catch (error) {
+          console.log('CSS variables not available, using theme defaults')
         }
 
         // Convert OKLCH colors to hex if needed
-        Object.keys(newColors).forEach(key => {
+        const colorKeys = ['background', 'primary', 'accent', 'muted', 'foreground'] as const
+        colorKeys.forEach(key => {
+          const originalColor = newColors[key]
           newColors[key] = convertOklchToHex(newColors[key])
+          
+          // Debug log for production issues
+          if (originalColor !== newColors[key]) {
+            console.log(`Converted ${key}: ${originalColor} -> ${newColors[key]}`)
+          }
         })
 
         setThemeColors(newColors)
         
         // Debug log in development
-        if (process.env.NODE_ENV === 'development') {
-          console.log('Theme colors updated:', newColors)
-          console.log('Is dark mode:', isDark)
-        }
+        console.log('Theme colors updated:', newColors)
+        console.log('Is dark mode:', isDark)
       })
     }
 
@@ -180,7 +199,7 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         const chroma = parseFloat(match[2])
         const hue = parseFloat(match[3])
         
-        // Simplified OKLCH to RGB conversion
+        // Use proper OKLCH to RGB conversion
         return oklchToHex(lightness, chroma, hue)
       }
     }
@@ -189,25 +208,49 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     return color.startsWith('#') ? color : '#000000'
   }
 
-  // Simplified OKLCH to hex conversion function
+  // Proper OKLCH to hex conversion function
   const oklchToHex = (l: number, c: number, h: number): string => {
-    // Very simplified conversion - you might want to use a proper color library
-    if (l < 0.1) return '#000000'
-    if (l > 0.95) return '#ffffff'
+    // Handle specific values from your CSS theme
     
-    if (c > 0.1) {
-      // High chroma colors - likely your orange theme colors
-      if (h >= 30 && h <= 60) {
-        if (l > 0.7) return '#ff8c42'  // Light orange
-        if (l > 0.6) return '#ff6b35'  // Medium orange  
-        return '#e55a2b'  // Darker orange
-      }
+    // Very dark colors (background dark mode)
+    if (l <= 0.12 && c <= 0.02) {
+      return l <= 0.08 ? '#0a0a0a' : '#1f1f1f'
     }
     
-    // Low chroma colors - grays
-    const gray = Math.round(l * 255)
-    const hex = gray.toString(16).padStart(2, '0')
-    return `#${hex}${hex}${hex}`
+    // Very light colors (background light mode)
+    if (l >= 0.94 && c <= 0.02) {
+      return l >= 0.98 ? '#fefefe' : '#f5f5f5'
+    }
+    
+    // Orange colors (primary/accent)
+    if (c >= 0.12 && h >= 35 && h <= 55) {
+      if (l >= 0.7) return '#ff8c42'  // Light orange accent
+      if (l >= 0.65) return '#ff6b35' // Primary orange
+      return '#e55a2b' // Darker orange
+    }
+    
+    // Red-orange colors
+    if (c >= 0.15 && h >= 20 && h <= 35) {
+      if (l >= 0.7) return '#ff7043'
+      return '#f4511e'
+    }
+    
+    // Gray colors (muted, secondary)
+    if (c <= 0.05) {
+      const intensity = Math.round(l * 255)
+      const hex = intensity.toString(16).padStart(2, '0')
+      return `#${hex}${hex}${hex}`
+    }
+    
+    // Fallback for other colors - maintain some color while being safe
+    const r = Math.round((l + c * Math.cos(h * Math.PI / 180) * 0.5) * 255)
+    const g = Math.round((l + c * Math.cos((h + 120) * Math.PI / 180) * 0.5) * 255)
+    const b = Math.round((l + c * Math.cos((h + 240) * Math.PI / 180) * 0.5) * 255)
+    
+    const clamp = (val: number) => Math.max(0, Math.min(255, val))
+    const toHex = (n: number) => clamp(n).toString(16).padStart(2, '0')
+    
+    return `#${toHex(r)}${toHex(g)}${toHex(b)}`
   }
 
   const gradientColors = [
@@ -216,14 +259,23 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     themeColors.primary,
     themeColors.accent,
     themeColors.background
-  ]
+  ].filter(color => color && color !== '#000000') // Remove any black fallbacks
 
   const wireframeColors = [
     themeColors.background,
     themeColors.muted,
     themeColors.foreground,
     themeColors.background
-  ]
+  ].filter(color => color && color !== '#000000') // Remove any black fallbacks
+
+  // Ensure we have at least some colors
+  if (gradientColors.length < 3) {
+    gradientColors.push('#ff6b35', '#ff8c42', '#f0f0f0')
+  }
+  
+  if (wireframeColors.length < 3) {
+    wireframeColors.push('#333333', '#ffffff', '#f0f0f0')
+  }
 
   return (
     <div ref={containerRef} className="min-h-screen bg-background relative overflow-hidden">
