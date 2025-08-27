@@ -2,6 +2,7 @@
 
 import type React from "react"
 import { useEffect, useRef, useState } from "react"
+import { useTheme } from "next-themes"
 import dynamic from "next/dynamic"
 
 // Dynamically import MeshGradient with no SSR
@@ -18,55 +19,15 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [isActive, setIsActive] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
-  const [isDark, setIsDark] = useState(false)
+  const { theme, resolvedTheme } = useTheme()
+  
+  // Use resolvedTheme for actual theme detection (handles 'system' theme)
+  const isDark = resolvedTheme === 'dark'
 
   // Performance optimization: Only mount shaders after component is ready
   useEffect(() => {
     const timer = setTimeout(() => setIsMounted(true), 100)
     return () => clearTimeout(timer)
-  }, [])
-
-  // Robust theme detection for production
-  useEffect(() => {
-    const updateTheme = () => {
-      if (typeof window === 'undefined') return
-      
-      // Multiple ways to detect dark mode for reliability
-      const htmlEl = document.documentElement
-      const darkClass = htmlEl.classList.contains('dark')
-      const darkAttr = htmlEl.getAttribute('data-theme') === 'dark'
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)').matches
-      
-      // Use class first, then attribute, then media query as fallback
-      const newIsDark = darkClass || darkAttr || (!darkClass && !darkAttr && mediaQuery)
-      
-      setIsDark(newIsDark)
-    }
-
-    // Initial theme detection with multiple attempts for production
-    updateTheme()
-    setTimeout(updateTheme, 100)
-    setTimeout(updateTheme, 500)
-    
-    // Listen for theme changes
-    const observer = new MutationObserver(() => {
-      setTimeout(updateTheme, 50)
-    })
-    
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['class', 'data-theme', 'style']
-    })
-
-    // Also listen to system theme changes
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-    const handleMediaChange = () => setTimeout(updateTheme, 50)
-    mediaQuery.addEventListener('change', handleMediaChange)
-
-    return () => {
-      observer.disconnect()
-      mediaQuery.removeEventListener('change', handleMediaChange)
-    }
   }, [])
 
   useEffect(() => {
@@ -133,11 +94,18 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
     colors.background
   ]
 
+  // Don't render until next-themes has resolved the theme
+  if (!resolvedTheme || !isMounted) {
+    return (
+      <div ref={containerRef} className="min-h-screen bg-background relative overflow-hidden">
+        <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-background via-muted to-background opacity-80" />
+        {children}
+      </div>
+    )
+  }
+
   return (
     <div ref={containerRef} className="min-h-screen bg-background relative overflow-hidden">
-      {/* Fallback gradient background for when shaders are loading */}
-      <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-background via-muted to-background opacity-80" />
-
       {/* SVG Filters */}
       <svg className="absolute inset-0 w-0 h-0">
         <defs>
@@ -166,21 +134,19 @@ export default function ShaderBackground({ children }: ShaderBackgroundProps) {
         </defs>
       </svg>
 
-      {/* Background Shaders - Only render when mounted and on client side */}
-      {isMounted && typeof window !== 'undefined' && (
-        <>
-          <MeshGradient
-            className="absolute inset-0 w-full h-full"
-            colors={gradientColors}
-            speed={isActive ? 0.2 : 0.1}
-          />
-          <MeshGradient
-            className="absolute inset-0 w-full h-full opacity-20"
-            colors={wireframeColors}
-            speed={isActive ? 0.15 : 0.05}
-          />
-        </>
-      )}
+      {/* Background Shaders */}
+      <MeshGradient
+        key={`gradient-${resolvedTheme}`} // Force re-render on theme change
+        className="absolute inset-0 w-full h-full"
+        colors={gradientColors}
+        speed={isActive ? 0.2 : 0.1}
+      />
+      <MeshGradient
+        key={`wireframe-${resolvedTheme}`} // Force re-render on theme change
+        className="absolute inset-0 w-full h-full opacity-20"
+        colors={wireframeColors}
+        speed={isActive ? 0.15 : 0.05}
+      />
 
       {children}
     </div>
