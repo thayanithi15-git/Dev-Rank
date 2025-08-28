@@ -42,13 +42,13 @@ export default function ShaderShowcase() {
           <BentoSection />
         </AnimatedSection>
 
-        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-12" delay={0.2}>
+        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto" delay={0.2}>
           <LargeTestimonial />
         </AnimatedSection>
 
         <AnimatedSection
           id="pricing-section"
-          className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16"
+          className="relative z-10 max-w-[1320px] mx-auto"
           delay={0.2}
         >
           <PricingSection />
@@ -57,26 +57,26 @@ export default function ShaderShowcase() {
         {/* Optional: Uncomment if you want the testimonial grid */}
         <AnimatedSection
           id="testimonials-section"
-          className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16"
+          className="relative z-10 max-w-[1320px] mx-auto"
           delay={0.2}
         >
           <TestimonialGridSection />
         </AnimatedSection>
 
 
-        <AnimatedSection id="faq-section" className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-7" delay={0.2}>
+        <AnimatedSection id="faq-section" className="relative z-10 max-w-[1320px] mx-auto" delay={0.2}>
           <FAQSection />
         </AnimatedSection>
 
-        <AnimatedSection className="relative z-10 w-full mt-8 md:mt-16" delay={0.2}>
+        <AnimatedSection className="relative z-10 w-full" delay={0.2}>
           <div className="relative h-[60vh] md:h-[70vh] lg:h-[80vh] max-w-[1320px] mx-auto px-4 md:px-6 lg:px-8">
             <Background src="./videos/alt.mp4" placeholder="/images/alt-placeholder.png" />
             <div className="relative z-10 flex flex-col justify-center items-center h-full gap-6 md:gap-8 lg:gap-9 max-w-4xl mx-auto px-4">
               <div className="flex flex-col justify-center items-center gap-3 md:gap-4 text-center">
-                <h2 className="text-foreground text-2xl md:text-4xl lg:text-5xl xl:text-[68px] font-semibold leading-tight md:leading-tight lg:leading-[76px] break-words max-w-[300px] md:max-w-[435px]">
+                <h2 className="text-gray-900 text-2xl md:text-4xl lg:text-5xl xl:text-[68px] font-semibold leading-tight md:leading-tight lg:leading-[76px] break-words max-w-[300px] md:max-w-[435px]">
                   Coding made effortless
                 </h2>
-                <p className="text-muted-foreground text-xs md:text-sm lg:text-base font-medium leading-relaxed break-words max-w-lg md:max-w-xl lg:max-w-2xl px-2">
+                <p className="text-gray-700 text-md font-medium leading-relaxed break-words max-w-lg md:max-w-xl lg:max-w-2xl px-2">
                   Hear how developers ship products faster, collaborate seamlessly, and build with confidence using Pointer's
                   powerful AI tools
                 </p>
@@ -93,7 +93,7 @@ export default function ShaderShowcase() {
           </div>
         </AnimatedSection>
 
-        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16" delay={0.2}>
+        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-26" delay={0.2}>
           <FooterSection />
           
         </AnimatedSection>

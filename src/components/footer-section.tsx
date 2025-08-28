@@ -1,12 +1,13 @@
 "use client"
 
 import { Twitter, Github, Linkedin, Mail, ArrowRight, Heart, Code, Users, TrendingUp, Shield, Zap } from "lucide-react"
+import { Button } from "./ui/button"
 
 export function FooterSection() {
   return (
-    <footer className="relative w-full bg-gradient-to-b from-background to-muted/30 border-t border-border">
+    <footer className="relative w-full bg-gradient-to-b from-background to-muted/30">
       {/* Background Pattern */}
-      <div className="absolute inset-0 theme-bg-pattern pointer-events-none" />
+      {/* <div className="absolute inset-0 theme-bg-pattern pointer-events-none" /> */}
       
       <div className="relative w-full max-w-[1320px] mx-auto px-5">
         {/* Top Section - Newsletter & CTA */}
@@ -28,10 +29,10 @@ export function FooterSection() {
                   className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                 />
               </div>
-              <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200 flex items-center gap-2 whitespace-nowrap">
+              <Button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200 flex items-center gap-2 whitespace-nowrap">
                 Subscribe
                 <ArrowRight className="w-4 h-4" />
-              </button>
+              </Button>
             </div>
           </div>
         </div>
