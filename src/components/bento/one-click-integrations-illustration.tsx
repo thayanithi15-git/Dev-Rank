@@ -147,6 +147,7 @@ const OneClickIntegrationsIllustration: React.FC<OneClickIntegrationsIllustratio
           y2="23.7457"
           gradientUnits="userSpaceOnUse"
         >
+          
           <stop stopColor="var(--oci-primary-color)" />
           <stop offset="1" stopColor="var(--oci-primary-color)" />
         </linearGradient>
