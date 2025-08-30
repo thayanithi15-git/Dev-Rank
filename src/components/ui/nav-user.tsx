@@ -26,7 +26,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 // import { useAuthMeStore } from '@/store/auth/me/me'
 import { decryptData } from '../utils/crypto'
 
@@ -43,7 +43,9 @@ export function NavUser({
   const router = useRouter()
 
   function handleLogout() {
+    if (typeof window !== "undefined") {
     localStorage.clear()
+    }
     router.push('/sign-in')
   }
 
@@ -66,13 +68,20 @@ export function NavUser({
     return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
   }
 
-  const newEncryptedRole = localStorage.getItem("role");
-  const appRole = newEncryptedRole ? decryptData(newEncryptedRole) : null;
+  const [userDetails, setUserDetails] = useState({ name: "", email: "" });
+  const [appRole, setAppRole] = useState<string | null>(null);
 
-  const userDetails = {
-    name: localStorage.getItem("name") || '',
-    email: localStorage.getItem("email") || ''
-  }
+  useEffect(() => {
+    const newEncryptedRole = localStorage.getItem("role");
+    const role = newEncryptedRole ? decryptData(newEncryptedRole) : null;
+
+    setAppRole(role);
+
+    setUserDetails({
+      name: localStorage.getItem("name") || "",
+      email: localStorage.getItem("email") || "",
+    });
+  }, []);
 
   return (
     <SidebarMenu>
@@ -110,7 +119,7 @@ export function NavUser({
                   <span className='truncate font-semibold'>{userDetails?.name || 'David John'}</span>
                   <span className='truncate text-xs'>{userDetails?.email || 'davidjohn@devrank.com'}</span>
                   <p className='flex py-2 text-green-600'>
-                    {appRole?.charAt(0).toUpperCase() + appRole?.slice(1) || 'Super Admin'}
+                    {(appRole ? appRole.charAt(0).toUpperCase() + appRole.slice(1) : 'Super Admin')}
                   </p>
                 </div>
               </div>
