@@ -1,5 +1,5 @@
 'use client';;
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import {
     Eye, EyeOff, Mail, Lock, ArrowRight, Trophy, Star,
     Users, TrendingUp, Shield, Sparkles, Rocket, Github, Sun, Moon
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const DevRankSignIn = () => {
     const [showPassword, setShowPassword] = useState(false);
@@ -36,12 +37,15 @@ const DevRankSignIn = () => {
         setSignInData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
+    const router = useRouter();
+
     const handleSubmit = async () => {
         setIsLoading(true);
         setTimeout(() => {
-            console.log('Sign in:', signInData);
+            // console.log('Sign in:', signInData);
             setIsLoading(false);
         }, 2000);
+        router.push('/dashboard');
     };
 
     return (
