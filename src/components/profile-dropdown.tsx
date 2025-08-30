@@ -62,19 +62,19 @@ export function ProfileDropdown() {
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
             <AvatarImage src='/avatars/01.png' alt='@shadcn' />
-            <AvatarFallback className='rounded-lg'>{getInitials(userDetails?.name ?? '')}</AvatarFallback>
+            <AvatarFallback className='rounded-lg'>{getInitials(userDetails?.name || 'D')}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm leading-none font-medium'>{userDetails?.name ?? ''}</p>
+            <p className='text-sm leading-none font-medium'>{userDetails?.name || 'David John'}</p>
             <p className='text-muted-foreground text-xs leading-none'>
-              {userDetails?.email ?? ''}
+              {userDetails?.email || 'davidjohn@devrank.com'}
             </p>
             <p className='flex py-2 text-green-600 font-semibold'>
-              {appRole.charAt(0).toUpperCase() + appRole.slice(1)}
+              {appRole?.charAt(0).toUpperCase() + appRole?.slice(1) || 'Super Admin'}
             </p>
           </div>
         </DropdownMenuLabel>

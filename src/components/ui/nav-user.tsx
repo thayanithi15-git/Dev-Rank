@@ -84,12 +84,12 @@ export function NavUser({
               className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer'
             >
               <Avatar className='h-8 w-8 rounded-lg'>
-                <AvatarImage src={user.avatar} alt={userDetails?.name ?? ''} />
-                <AvatarFallback className='rounded-lg'>{getInitials(userDetails?.name ?? '')}</AvatarFallback>
+                <AvatarImage src={user.avatar} alt={userDetails?.name || 'David John'} />
+                <AvatarFallback className='rounded-lg'>{getInitials(userDetails?.name || 'D')}</AvatarFallback>
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
-                <span className='truncate font-semibold'>{userDetails?.name ?? ''}</span>
-                <span className='truncate text-xs'>{userDetails?.email ?? ''}</span>
+                <span className='truncate font-semibold'>{userDetails?.name ||  'David John'}</span>
+                <span className='truncate text-xs'>{userDetails?.email || 'davidjohn@devrank.com'}</span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
@@ -103,14 +103,14 @@ export function NavUser({
             <DropdownMenuLabel className='p-0 font-normal cursor-pointer'>
               <div className='flex items-center gap-2 px-1 py-1.5 text-left text-sm'>
                 <Avatar className='h-8 w-8 rounded-lg'>
-                  <AvatarImage src={user.avatar} alt={userDetails?.name ?? ''} />
-                  <AvatarFallback className='rounded-lg'>{getInitials(userDetails?.name ?? '')}</AvatarFallback>
+                  <AvatarImage src={user.avatar} alt={userDetails?.name ||  'David John'} />
+                  <AvatarFallback className='rounded-lg'>{getInitials(userDetails?.name || 'D')}</AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
-                  <span className='truncate font-semibold'>{userDetails?.name ?? ''}</span>
-                  <span className='truncate text-xs'>{userDetails?.email ?? ''}</span>
+                  <span className='truncate font-semibold'>{userDetails?.name || 'David John'}</span>
+                  <span className='truncate text-xs'>{userDetails?.email || 'davidjohn@devrank.com'}</span>
                   <p className='flex py-2 text-green-600'>
-                    {appRole.charAt(0).toUpperCase() + appRole.slice(1)}
+                    {appRole?.charAt(0).toUpperCase() + appRole?.slice(1) || 'Super Admin'}
                   </p>
                 </div>
               </div>

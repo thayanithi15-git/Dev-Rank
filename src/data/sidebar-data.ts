@@ -48,9 +48,9 @@ export const generateSidebarData = (): SidebarData => {
     },
     teams: [
       {
-        name: "CNC Machines Club",
+        name: "Dev Rank",
         logo: ShieldEllipsis,
-        plan: "Smart Maintenance",
+        plan: "Developer Profiling & Ranking Platform",
       },
     ],
     navGroups: [
@@ -63,25 +63,25 @@ export const generateSidebarData = (): SidebarData => {
             icon: LayoutDashboard,
           },
           {
-            title: "Machine Overview",
-            url: "/dashboard/machines-overview",
+            title: "Top Rankers",
+            url: "/top-rankers",
             icon: Wrench,
           },
           {
-            title: "Version Tracker",
-            url: "/dashboard/version-tracker",
+            title: "Profile Analyzer",
+            url: "/profile-analyzer",
             icon: FolderOpen,
           },
-          {
-            title: "Part Programs",
-            url: "/dashboard/part-programs",
-            icon: File,
-          },
-          {
-            title: "File Preview",
-            url: "/dashboard/file-preview",
-            icon: FolderOpen,
-          },
+          // {
+          //   title: "Part Programs",
+          //   url: "/dashboard/part-programs",
+          //   icon: File,
+          // },
+          // {
+          //   title: "File Preview",
+          //   url: "/dashboard/file-preview",
+          //   icon: FolderOpen,
+          // },
           // {
           //   title: "Document Library",
           //   url: "/dashboard/documents",
@@ -92,42 +92,42 @@ export const generateSidebarData = (): SidebarData => {
           //   url: "/dashboard/backups",
           //   icon: Database,
           // },
-          ...(appRole === "admin" || appRole === "super admin"
-            ? [
-              {
-                title: "Backup Center",
-                url: "/dashboard/backups",
-                icon: Database,
-              },
-            ]
-            : []),
+          // ...(appRole === "admin" || appRole === "super admin"
+          //   ? [
+          //     {
+          //       title: "Backup Center",
+          //       url: "/dashboard/backups",
+          //       icon: Database,
+          //     },
+          //   ]
+          //   : []),
         ],
       },
       {
         title: "Management Console",
         items: [
-          ...(appRole === "admin" || appRole === "super admin"
-            ? [
-              {
-                title: "User Access Control",
-                url: "/dashboard/users-manage",
-                icon: UserCog,
-              },
+          // ...(appRole === "admin" || appRole === "super admin"
+          //   ? [
+          //     {
+          //       title: "User Access Control",
+          //       url: "/dashboard/users-manage",
+          //       icon: UserCog,
+          //     },
               // {
               //   title: "System Reports",
               //   url: "/dashboard/reports",
               //   icon: CalendarDays,
               // },
-              {
-                title: "Resource Allocation",
-                url: "/dashboard/resource-allocation",
-                icon: UserCheck,
-              },
-            ]
-            : []),
+            //   {
+            //     title: "Resource Allocation",
+            //     url: "/dashboard/resource-allocation",
+            //     icon: UserCheck,
+            //   },
+            // ]
+            // : []),
           {
             title: "Activity Tracking",
-            url: "/dashboard/activity-logs",
+            url: "activity-track",
             icon: History,
           },
         ],
@@ -137,7 +137,7 @@ export const generateSidebarData = (): SidebarData => {
         items: [
           {
             title: "Help Center",
-            url: "/dashboard/help-center",
+            url: "help-center",
             icon: HelpCircle,
           },
           // {
@@ -160,9 +160,9 @@ export const sidebarData: SidebarData = {
   },
   teams: [
     {
-      name: "CNC Machines Club",
+      name: "Dev Rank",
       logo: ShieldEllipsis,
-      plan: "Smart Maintenance",
+      plan: "Developer Profiling Platform",
     },
   ],
   navGroups: [

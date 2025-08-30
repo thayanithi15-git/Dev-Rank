@@ -2,13 +2,20 @@
 
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import ThemeToggleButton from "./ui/theme-toggle-button"
 import AnimatedLoginButton from "./loginButton/loginbutton"
+import { useRouter } from "next/navigation"
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const router = useRouter();
+
+  const handleSignin = () => {
+    router.push('/signin');
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,7 +32,7 @@ export function Header() {
         setMobileMenuOpen(false)
       }
     }
-    
+
     if (mobileMenuOpen) {
       document.addEventListener('click', handleClickOutside)
       return () => document.removeEventListener('click', handleClickOutside)
@@ -50,13 +57,13 @@ export function Header() {
     >
       {/* Logo - Responsive sizing */}
       <div className="flex items-center flex-shrink-0">
-        <svg 
-          fill="currentColor" 
-          aria-hidden="true" 
-          className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-foreground" 
-          viewBox="0 0 256 227" 
-          version="1.1" 
-          xmlns="http://www.w3.org/2000/svg" 
+        <svg
+          fill="currentColor"
+          aria-hidden="true"
+          className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-foreground"
+          viewBox="0 0 256 227"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="xMidYMid"
         >
           <title>Tapcart</title>
@@ -91,7 +98,9 @@ export function Header() {
       {/* Right side controls - Desktop */}
       <div className="hidden lg:flex items-center gap-3 xl:gap-4">
         <ThemeToggleButton />
-        <AnimatedLoginButton />
+        <div onClick={handleSignin}>
+          <AnimatedLoginButton />
+        </div>
       </div>
 
       {/* Mobile/Tablet controls */}
@@ -102,19 +111,19 @@ export function Header() {
           aria-label="Open menu"
           onClick={() => setMobileMenuOpen((v) => !v)}
         >
-          <svg 
-            width="24" 
-            height="24" 
-            className="sm:w-7 sm:h-7" 
-            fill="none" 
-            stroke="currentColor" 
-            strokeWidth={2} 
+          <svg
+            width="24"
+            height="24"
+            className="sm:w-7 sm:h-7"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
             viewBox="0 0 24 24"
           >
             <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        
+
         {/* Mobile dropdown menu - Improved positioning and responsiveness */}
         {mobileMenuOpen && (
           <div className="absolute top-full right-0 mt-2 w-40 sm:w-44 md:w-48 rounded-xl bg-background/90 backdrop-blur-3xl shadow-2xl border border-white/20 flex flex-col z-50 animate-fade-in before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/[0.05] before:to-white/[0.02] before:rounded-xl before:-z-10">

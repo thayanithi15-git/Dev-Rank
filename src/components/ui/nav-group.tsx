@@ -23,7 +23,9 @@ export function NavGroup({ group }: NavGroupProps) {
         </h4>
       )}
       {group.items.map((item) => (
-        <NavItem key={item.title} item={item} pathname={pathname} />
+        <div key={item.title} className=''>
+          <NavItem item={item} pathname={pathname} />
+        </div>
       ))}
     </div>
   )
