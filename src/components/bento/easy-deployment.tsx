@@ -25,26 +25,26 @@ const DeploymentEasy: React.FC<DeploymentEasyProps> = ({ width = "100%", height 
    * Console log output (static for demo) – can be replaced via props
    * ---------------------------------------------------------- */
   const logLines = [
-    "[16:37:25.637] Running build in Washington, D.C., USA (East) – iad1",
-    "[16:37:25.638] Build machine configuration: 2 cores, 8 GB",
-    "[16:37:25.653] Retrieving list of deployment files...",
-    "[16:37:25.741] Previous build caches not available",
-    "[16:37:25.979] Downloading 84 deployment files...",
-    '[16:37:29.945] Running "vercel build"',
-    "[16:37:30.561] Vercel CLI 44.5.0",
-    '[16:37:30.880] Running "install" command: `bun install`...',
-    "[16:37:30.914] bun install v1.2.19 (aad3abea)",
-    "[16:37:30.940] Resolving dependencies",
-    "[16:37:34.436] Resolved, downloaded and extracted [1116]",
-    '[16:37:34.436] warn: incorrect peer dependency "react@19.1.0"',
-    "[16:37:37.265] Saved lockfile",
-    "[16:37:39.076] Next.js anonymous telemetry notice",
-    "[16:37:39.137] ▲ Next.js 15.2.4",
-    "[16:37:41.439] ✓ Compiled successfully",
-    "[16:37:53.979] ✓ Generated static pages",
-    "[16:38:00.585] ○ (Static) prerendered as static content",
-    "[16:38:01.099] Build Completed in /vercel/output [30s]",
-    "🚀 Deployment complete – Easy!",
+    "[09:15:32.127] Initializing developer profile analysis...",
+    "[09:15:32.128] Scanning connected platforms: GitHub, LeetCode, Stack Overflow",
+    "[09:15:32.153] Fetching GitHub repositories and contributions...",
+    "[09:15:32.241] Found 47 repositories, 1,247 commits this year",
+    "[09:15:32.479] Analyzing code quality and complexity metrics...",
+    '[09:15:35.945] Processing LeetCode performance data...',
+    "[09:15:36.561] Solved: 156 problems, Contest rating: 1,847",
+    '[09:15:36.880] Calculating Stack Overflow reputation...',
+    "[09:15:36.914] Reputation: 2,341, Top tags: JavaScript, React, Node.js",
+    "[09:15:37.940] Computing overall developer ranking...",
+    "[09:15:40.436] Skill assessment: Expert in Frontend, Advanced in Backend",
+    '[09:15:41.436] AI analysis: Strong problem-solving abilities',
+    "[09:15:43.265] Profile optimization suggestions generated",
+    "[09:15:45.076] Matching with potential recruiters...",
+    "[09:15:47.137] ✓ Found 23 compatible job opportunities",
+    "[09:15:49.439] ✓ Profile visibility increased by 340%",
+    "[09:15:52.979] ✓ Developer ranking updated: #1,247 globally",
+    "[09:15:55.585] ○ Ready for recruiter discovery",
+    "[09:15:57.099] Profile Build Completed successfully [42s]",
+    "🚀 Your DevRank profile is live!",
   ]
 
   return (
@@ -149,7 +149,7 @@ const DeploymentEasy: React.FC<DeploymentEasyProps> = ({ width = "100%", height 
             "0px 42.075px 11.475px rgba(0, 0, 0, 0), 0px 26.775px 10.2px rgba(0, 0, 0, 0.01), 0px 15.3px 8.925px rgba(0, 0, 0, 0.05), 0px 6.375px 6.375px rgba(0, 0, 0, 0.09), 0px 1.275px 3.825px rgba(0, 0, 0, 0.1)",
         }}
       >
-        🚀 Deploy on Vercel
+        🚀 Create Profile
       </button>
     </div>
   )

@@ -64,32 +64,21 @@ const AiCodeReviews: React.FC = () => {
               margin: 0,
             }}
           >
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>switch (type) {"{"}</p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}> case 'success':</p>
+            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>// Developer skill analysis</p>
+            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>const analyzeSkills = (profile) =&gt; {"{"}{"}"}</p>
             <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}> return {"{"}</p>
             <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>
-              {"          border: theme === 'dark' ? 'border-[rgba(34,197,94,0.4)]' : 'border-green-200',"}
+              {"    githubScore: calculateGitHubActivity(profile.github),"}
             </p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}> icon: (</p>
+            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>{"    leetcodeRank: profile.leetcode.rank,"}</p>
             <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>
-              {'            <svg className={\'baseIconClasses\'} fill="none" viewBox="0 0 14 14">'}
+              {"    overallRating: computeDevRank(profile),"}
             </p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}> &lt;path</p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>
-              {'                d="M3.85156 7.875L6.47656 10.5L10.8516 3.5"'}
-            </p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>
-              {'                stroke="var(--ai-primary-color)"'}
-            </p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>
-              {'                strokeLinecap="round"'}
-            </p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>
-              {'                strokeLinejoin="round"'}
-            </p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>{'                strokeWidth="1.5"'}</p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}> /&gt;</p>
-            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}> &lt;/svg&gt;</p>
+            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}> {"}"}</p>
+            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>{"}"}</p>
+            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}></p>
+            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>{"// AI-powered ranking algorithm"}</p>
+            <p style={{ margin: 0, whiteSpace: "pre-wrap", fontWeight: 400 }}>{"const devRank = analyzeSkills(developerProfile)"}</p>
           </div>
         </div>
       </div>
@@ -216,7 +205,7 @@ const AiCodeReviews: React.FC = () => {
                 fontWeight: 500,
               }}
             >
-              Apply changes
+              Analyze Profile
             </span>
             <span
               style={{
@@ -224,7 +213,7 @@ const AiCodeReviews: React.FC = () => {
                 fontWeight: 500,
               }}
             >
-              ⌘Y
+              ⌘A
             </span>
           </button>
         </div>

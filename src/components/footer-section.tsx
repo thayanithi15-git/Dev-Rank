@@ -1,5 +1,3 @@
-"use client"
-
 import { Twitter, Github, Linkedin } from "lucide-react"
 
 export function FooterSection() {
@@ -8,9 +6,9 @@ export function FooterSection() {
       {/* Left Section: Logo, Description, Social Links */}
       <div className="flex flex-col justify-start items-start gap-8 p-4 md:p-8">
         <div className="flex gap-3 items-stretch justify-center">
-          <div className="text-center text-foreground text-xl font-semibold leading-4">Pointer</div>
+          <div className="text-center text-foreground text-xl font-semibold leading-4">DevRank</div>
         </div>
-        <p className="text-foreground/90 text-sm font-medium leading-[18px] text-left">Coding made effortless</p>
+        <p className="text-foreground/90 text-sm font-medium leading-[18px] text-left">Developers get ranked, recruiters find talent</p>
         <div className="flex justify-start items-start gap-3">
           <a href="#" aria-label="Twitter" className="w-4 h-4 flex items-center justify-center">
             <Twitter className="w-full h-full text-muted-foreground" />
@@ -26,22 +24,22 @@ export function FooterSection() {
       {/* Right Section: Product, Company, Resources */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 p-4 md:p-8 w-full md:w-auto">
         <div className="flex flex-col justify-start items-start gap-3">
-          <h3 className="text-muted-foreground text-sm font-medium leading-5">Product</h3>
+          <h3 className="text-muted-foreground text-sm font-medium leading-5">Platform</h3>
           <div className="flex flex-col justify-end items-start gap-2">
             <a href="#" className="text-foreground text-sm font-normal leading-5 hover:underline">
-              Features
+              Developer Ranking
             </a>
             <a href="#" className="text-foreground text-sm font-normal leading-5 hover:underline">
               Pricing
             </a>
             <a href="#" className="text-foreground text-sm font-normal leading-5 hover:underline">
-              Integrations
+              Platform Integrations
             </a>
             <a href="#" className="text-foreground text-sm font-normal leading-5 hover:underline">
-              Real-time Previews
+              AI Analysis
             </a>
             <a href="#" className="text-foreground text-sm font-normal leading-5 hover:underline">
-              Multi-Agent Coding
+              Recruiter Tools
             </a>
           </div>
         </div>
@@ -72,10 +70,10 @@ export function FooterSection() {
               Terms of use
             </a>
             <a href="#" className="text-foreground text-sm font-normal leading-5 hover:underline">
-              API Reference
+              Privacy Policy
             </a>
             <a href="#" className="text-foreground text-sm font-normal leading-5 hover:underline">
-              Documentation
+              Developer Guide
             </a>
             <a href="#" className="text-foreground text-sm font-normal leading-5 hover:underline">
               Community
