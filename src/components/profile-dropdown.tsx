@@ -1,4 +1,5 @@
 "use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -14,7 +15,7 @@ import {
 // import { useAuthMeStore } from '@/store/auth/me/me';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { decryptData } from './utils/crypto';
 
 
@@ -31,7 +32,9 @@ export function ProfileDropdown() {
   // }, [TokenExpired])
 
   function handleLogout() {
-    localStorage.clear()
+    if (typeof window !== "undefined") {
+      localStorage.clear()
+    }
     router.push('/sign-in')
   }
 
@@ -48,13 +51,20 @@ export function ProfileDropdown() {
     return (words[0].charAt(0) + words[1].charAt(0)).toUpperCase();
   }
 
-  const newEncryptedRole = localStorage.getItem("role");
-  const appRole = newEncryptedRole ? decryptData(newEncryptedRole) : null;
+  const [userDetails, setUserDetails] = useState({ name: "", email: "" });
+  const [appRole, setAppRole] = useState<string | null>(null);
 
-  const userDetails = {
-    name: localStorage.getItem("name") || '',
-    email: localStorage.getItem("email") || ''
-  }
+  useEffect(() => {
+    const newEncryptedRole = localStorage.getItem("role");
+    const role = newEncryptedRole ? decryptData(newEncryptedRole) : null;
+
+    setAppRole(role);
+
+    setUserDetails({
+      name: localStorage.getItem("name") || "",
+      email: localStorage.getItem("email") || "",
+    });
+  }, []);
 
   return (
     <DropdownMenu modal={false}>
@@ -62,19 +72,19 @@ export function ProfileDropdown() {
         <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
           <Avatar className='h-8 w-8'>
             <AvatarImage src='/avatars/01.png' alt='@shadcn' />
-            <AvatarFallback className='rounded-lg'>{getInitials(userDetails?.name ?? '')}</AvatarFallback>
+            <AvatarFallback className='rounded-lg'>{getInitials(userDetails?.name || 'D')}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='end' forceMount>
         <DropdownMenuLabel className='font-normal'>
           <div className='flex flex-col space-y-1'>
-            <p className='text-sm leading-none font-medium'>{userDetails?.name ?? ''}</p>
+            <p className='text-sm leading-none font-medium'>{userDetails?.name || 'David John'}</p>
             <p className='text-muted-foreground text-xs leading-none'>
-              {userDetails?.email ?? ''}
+              {userDetails?.email || 'davidjohn@devrank.com'}
             </p>
             <p className='flex py-2 text-green-600 font-semibold'>
-              {appRole.charAt(0).toUpperCase() + appRole.slice(1)}
+              {(appRole ? appRole.charAt(0).toUpperCase() + appRole.slice(1) : 'Super Admin')}
             </p>
           </div>
         </DropdownMenuLabel>

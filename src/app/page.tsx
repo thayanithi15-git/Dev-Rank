@@ -32,21 +32,21 @@ export default function ShaderShowcase() {
       {/* Main Content with Themed Background */}
       <div className="relative bg-background">
 
-        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto px-6 pt-16" delay={0.1}>
+        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto px-6 pt-14" delay={0.1}>
           <SocialProof />
         </AnimatedSection>
 
-        <AnimatedSection id="features-section" className="relative z-10 max-w-[1320px] mx-auto mt-10" delay={0.2}>
+        <AnimatedSection id="features-section" className="relative z-10 max-w-[1320px] mx-auto" delay={0.2}>
           <BentoSection />
         </AnimatedSection>
 
-        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-12" delay={0.2}>
+        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto" delay={0.2}>
           <LargeTestimonial />
         </AnimatedSection>
 
         <AnimatedSection
           id="pricing-section"
-          className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16"
+          className="relative z-10 max-w-[1320px] mx-auto"
           delay={0.2}
         >
           <PricingSection />
@@ -55,14 +55,14 @@ export default function ShaderShowcase() {
         {/* Optional: Uncomment if you want the testimonial grid */}
         <AnimatedSection
           id="testimonials-section"
-          className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16"
+          className="relative z-10 max-w-[1320px] mx-auto"
           delay={0.2}
         >
           <TestimonialGridSection />
         </AnimatedSection>
 
 
-        <AnimatedSection id="faq-section" className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16" delay={0.2}>
+        <AnimatedSection id="faq-section" className="relative z-10 max-w-[1320px] mx-auto" delay={0.2}>
           <FAQSection />
         </AnimatedSection>
 
@@ -93,8 +93,9 @@ export default function ShaderShowcase() {
           </div>
         </AnimatedSection>
 
-        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-16" delay={0.2}>
+        <AnimatedSection className="relative z-10 max-w-[1320px] mx-auto mt-8 md:mt-26" delay={0.2}>
           <FooterSection />
+          
         </AnimatedSection>
       </div>
     </div>

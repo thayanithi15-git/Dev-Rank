@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   description:
     "AI-Powered Developer Profiling & Ranking Platform",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.svg",
   },
 };
 

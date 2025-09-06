@@ -44,12 +44,12 @@ export function NavItem({ item, pathname }: NavItemProps) {
           isActive={checkIsActive(pathname, item)}
           tooltip={item.title}
           className={cn(
-            "group relative h-10 rounded-lg transition-all duration-200 ",
-            "hover:bg-accent/80 hover:text-accent-foreground",
+            "group relative my-2 h-10 rounded-lg transition-all duration-200 ",
+            "hover:bg-accent/80 hover:text-accent-foreground ",
             "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
             // Better icon centering for collapsed state
             isCollapsed
-            ? "justify-center ml-2"
+            ? "justify-center ml-2 my-4 w-10"
             : "justify-start px-3", 
             checkIsActive(pathname, item) && [
               "bg-primary/10 text-primary font-medium",
@@ -62,12 +62,12 @@ export function NavItem({ item, pathname }: NavItemProps) {
             onClick={() => setOpenMobile(false)} 
             className={cn(
               "flex items-center w-full ",
-              isCollapsed ? "justify-center" : "gap-4"
+              isCollapsed ? "justify-center w-10 h-10" : "gap-4"
             )}
           >
             {item.icon && (
               <item.icon className={cn(
-                "h-5 w-5 shrink-0 transition-colors",
+                `h-5 w-5 shrink-0 transition-colors`,
                 checkIsActive(pathname, item) ? "text-primary" : "text-muted-foreground"
               )} />
             )}
@@ -97,7 +97,7 @@ export function NavItem({ item, pathname }: NavItemProps) {
                 "data-[state=open]:bg-accent/50",
                 "justify-center px-2", // Center the icon in collapsed state
                 isCollapsed
-            ? "justify-center ml-2"
+            ? "justify-center ml-2 "
             : "justify-start px-3", 
                 checkIsActive(pathname, item) && [
                   "bg-primary/10 text-primary font-medium",

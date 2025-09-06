@@ -1,14 +1,21 @@
 "use client"
 
-
 import { cn } from "@/lib/utils"
 import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { use, useEffect, useState } from "react"
 import ThemeToggleButton from "./ui/theme-toggle-button"
+import AnimatedLoginButton from "./loginButton/loginbutton"
+import { useRouter } from "next/navigation"
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const router = useRouter();
+
+  const handleSignin = () => {
+    router.push('/signin');
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,10 +25,28 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (mobileMenuOpen && !event.target.closest('.mobile-menu-container')) {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    if (mobileMenuOpen) {
+      document.addEventListener('click', handleClickOutside)
+      return () => document.removeEventListener('click', handleClickOutside)
+    }
+  }, [mobileMenuOpen])
+
   return (
     <motion.header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 md:px-10 md:py-2 transition-all duration-500",
+        "fixed top-0 left-0 right-0 z-50 flex items-center justify-between transition-all duration-500",
+        // Responsive padding
+        "px-3 py-2 sm:px-4 sm:py-3 md:px-6 lg:px-10 md:py-2",
+        // Responsive height
+        "h-14 sm:h-16 md:h-18",
         isScrolled
           ? "backdrop-blur-3xl bg-background/10 border-b border-white/20 shadow-2xl before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/[0.08] before:via-white/[0.05] before:to-white/[0.08] before:rounded-lg before:-z-10"
           : "bg-transparent border-b border-transparent",
@@ -48,8 +73,8 @@ export function Header() {
         </div>
       </div>
 
-      {/* Desktop Navigation */}
-      <nav className="hidden md:flex items-center gap-2 lg:gap-6">
+      {/* Desktop Navigation - Hidden on mobile/tablet */}
+      <nav className="hidden lg:flex items-center gap-1 xl:gap-6">
         <a
           href="#rankings"
           className="text-foreground/95 hover:text-white hover:font-semibold text-sm font-medium px-4 py-2 rounded-full hover:bg-white/30 hover:backdrop-blur-sm transition-all duration-200 hover:shadow-lg"
@@ -65,6 +90,7 @@ export function Header() {
         <a
           href="#for-recruiters"
           className="text-foreground/95 hover:text-white hover:font-semibold text-sm font-medium px-4 py-2 rounded-full hover:bg-white/30 hover:backdrop-blur-sm transition-all duration-200 hover:shadow-lg"
+
         >
           For Recruiters
         </a>
@@ -77,7 +103,7 @@ export function Header() {
       </nav>
 
       {/* Right side controls - Desktop */}
-      <div className="hidden md:flex items-center gap-4">
+      <div className="hidden lg:flex items-center gap-3 xl:gap-4">
         <ThemeToggleButton />
 
         {/* Login Button Group with Arrow - Updated for DevRank */}
@@ -94,27 +120,38 @@ export function Header() {
           <button className="px-6 py-2 rounded-full bg-primary/80 backdrop-blur-sm text-primary-foreground font-normal text-sm transition-all duration-300 hover:bg-primary/90 cursor-pointer h-10 flex items-center z-10 shadow-lg border border-white/20">
             Join DevRank
           </button>
+
         </div>
       </div>
 
-      {/* Mobile controls */}
-      <div className="md:hidden flex items-center gap-3">
+      {/* Mobile/Tablet controls */}
+      <div className="lg:hidden flex items-center gap-2 sm:gap-3 mobile-menu-container relative">
         <ThemeToggleButton />
         <button
-          className="text-foreground p-2 rounded-full hover:bg-white/10 hover:backdrop-blur-sm transition-all duration-200 focus:outline-none hover:shadow-lg"
+          className="text-foreground p-1.5 sm:p-2 rounded-full hover:bg-white/10 hover:backdrop-blur-sm transition-all duration-200 focus:outline-none hover:shadow-lg"
           aria-label="Open menu"
           onClick={() => setMobileMenuOpen((v) => !v)}
         >
-          <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <svg
+            width="24"
+            height="24"
+            className="sm:w-7 sm:h-7"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
             <path strokeLinecap="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        {/* Mobile dropdown menu */}
+
+        {/* Mobile dropdown menu - Improved positioning and responsiveness */}
         {mobileMenuOpen && (
-          <div className="absolute top-full right-4 mt-2 w-44 rounded-xl bg-background/90 backdrop-blur-3xl shadow-2xl border border-white/20 flex flex-col z-50 animate-fade-in before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/[0.05] before:to-white/[0.02] before:rounded-xl before:-z-10">
+          <div className="absolute top-full right-0 mt-2 w-40 sm:w-44 md:w-48 rounded-xl bg-background/90 backdrop-blur-3xl shadow-2xl border border-white/20 flex flex-col z-50 animate-fade-in before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/[0.05] before:to-white/[0.02] before:rounded-xl before:-z-10">
             <a
               href="#rankings"
               className="px-5 py-3 text-foreground/95 hover:text-primary hover:bg-white/10 hover:backdrop-blur-sm rounded-t-xl text-base font-medium transition-all duration-150"
+
               onClick={() => setMobileMenuOpen(false)}
             >
               Rankings
@@ -141,7 +178,7 @@ export function Header() {
               Pricing
             </a>
             <button
-              className="mt-2 mb-2 mx-4 px-4 py-2 rounded-full bg-primary/80 backdrop-blur-sm text-primary-foreground font-medium text-base transition-all duration-200 hover:bg-primary/90 focus:outline-none shadow-lg border border-white/20"
+              className="mt-1.5 sm:mt-2 mb-1.5 sm:mb-2 mx-3 sm:mx-4 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/80 backdrop-blur-sm text-primary-foreground font-medium text-sm sm:text-base transition-all duration-200 hover:bg-primary/90 focus:outline-none shadow-lg border border-white/20"
               onClick={() => setMobileMenuOpen(false)}
             >
               Join DevRank
