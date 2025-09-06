@@ -9,53 +9,53 @@ export function PricingSection() {
 
   const pricingPlans = [
     {
-      name: "Free",
+      name: "Developer",
       monthlyPrice: "$0",
       annualPrice: "$0",
-      description: "Perfect for individuals starting their journey.",
+      description: "Perfect for developers building their professional profile.",
       features: [
-        "Real-time code suggestions",
-        "Basic integration logos",
-        "Single MCP server connection",
-        "Up to 2 AI coding agents",
-        "Vercel deployments with Pointer branding",
+        "Basic profile analysis",
+        "Connect GitHub & LeetCode",
+        "Skill assessment reports",
+        "Public developer ranking",
+        "Community access",
       ],
-      buttonText: "Get Started",
+      buttonText: "Create Profile",
       buttonClass:
         "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-lg border border-border",
     },
     {
-      name: "Pro",
-      monthlyPrice: "$20",
-      annualPrice: "$16",
-      description: "Ideal for professionals.",
+      name: "Pro Developer",
+      monthlyPrice: "$15",
+      annualPrice: "$12",
+      description: "Advanced features for serious developers.",
       features: [
-        "Enhanced real-time previews",
-        "Unlimited integrations with custom logos",
-        "Multiple MCP server connections",
-        "Up to 10 concurrent AI coding agents",
-        "Collaborative coding with team chat",
-        "Advanced version control integrations",
-        "Priority email and chat support",
+        "AI-powered skill analysis",
+        "Multi-platform integration (GitHub, LeetCode, Stack Overflow)",
+        "Advanced ranking algorithms",
+        "Private profile options",
+        "Recruiter visibility boost",
+        "Detailed performance insights",
+        "Career growth recommendations",
       ],
-      buttonText: "Join now",
+      buttonText: "Upgrade to Pro",
       buttonClass:
         "bg-background text-foreground hover:bg-muted shadow-lg border border-border",
       popular: true,
     },
     {
-      name: "Ultra",
-      monthlyPrice: "$200",
-      annualPrice: "$160",
-      description: "Tailored solutions for teams.",
+      name: "Recruiter",
+      monthlyPrice: "$99",
+      annualPrice: "$79",
+      description: "Find and connect with top-ranked developers.",
       features: [
-        "Dedicated account support",
-        "Unlimited MCP server clusters",
-        "Unlimited AI coding agents",
-        "Enterprise-grade security and compliance",
-        "Priority deployments and SLA guarantees",
+        "Access to all developer profiles",
+        "Advanced search filters by skills & ranking",
+        "AI-powered candidate matching",
+        "Direct contact capabilities",
+        "Hiring analytics dashboard",
       ],
-      buttonText: "Talk to Sales",
+      buttonText: "Start Recruiting",
       buttonClass:
         "bg-accent text-accent-foreground hover:bg-accent/90 shadow-lg border border-border",
     },
@@ -66,11 +66,10 @@ export function PricingSection() {
       <div className="self-stretch relative flex flex-col justify-center items-center gap-2 py-0">
         <div className="flex flex-col justify-start items-center gap-4">
           <h2 className="text-center text-foreground text-4xl md:text-5xl font-semibold leading-tight md:leading-[40px]">
-            Pricing built for every developer
+            Choose Your DevRank Plan
           </h2>
           <p className="self-stretch text-center text-muted-foreground text-sm font-medium leading-tight">
-            Choose a plan that fits your coding workflow, from individuals starting out to <br /> growing professionals
-            and large organizations.
+            Whether you're a developer looking to get discovered or a recruiter finding top talent, <br /> we have the perfect plan for your needs.
           </p>
         </div>
         <div className="pt-4">
@@ -174,7 +173,7 @@ export function PricingSection() {
               <div
                 className={`self-stretch text-sm font-medium leading-tight ${plan.popular ? "text-primary-foreground/70" : "text-muted-foreground"}`}
               >
-                {plan.name === "Free" ? "Get Started today:" : "Everything in Free +"}
+                {plan.name === "Developer" ? "Start building your profile:" : plan.name === "Recruiter" ? "Find top talent:" : "Everything in Developer +"}
               </div>
               <div className="self-stretch flex flex-col justify-start items-start gap-3">
                 {plan.features.map((feature) => (
