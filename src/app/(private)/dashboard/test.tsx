@@ -107,9 +107,68 @@ export default function DevRankDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Mobile Sidebar Overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`
+        fixed top-0 left-0 h-full w-64 bg-card border-r border-border z-50 transform transition-transform duration-300 ease-in-out
+        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0
+      `}>
+        <div className="p-6 border-b border-border">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
+                <Code2 className="w-4 h-4 text-primary-foreground" />
+              </div>
+              <span className="font-bold text-lg instrument">DevRank</span>
+            </div>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="lg:hidden"
+              onClick={() => setSidebarOpen(false)}
+            >
+              <X className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+
+        <nav className="p-4 space-y-2">
+          {sidebarItems.map((item, index) => (
+            <Button
+              key={index}
+              variant={item.active ? "secondary" : "ghost"}
+              className={`w-full justify-start gap-3 ${item.active ? 'bg-primary/10 text-primary' : ''}`}
+            >
+              <item.icon className="w-4 h-4" />
+              {item.name}
+            </Button>
+          ))}
+        </nav>
+
+        <div className="absolute bottom-4 left-4 right-4">
+          <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20">
+            <CardContent className="p-4">
+              <div className="text-sm font-medium text-primary mb-2">Upgrade to Pro</div>
+              <div className="text-xs text-muted-foreground mb-3">
+                Unlock advanced analytics and premium features
+              </div>
+              <Button size="sm" className="w-full professional-gradient text-primary-foreground">
+                Upgrade Now
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </aside>
 
       {/* Main Content */}
-      <div className="">
+      <div className="lg:ml-64">
         {/* Header */}
         <header className="bg-card border-b border-border px-4 lg:px-6 py-4">
           <div className="flex items-center justify-between">

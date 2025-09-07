@@ -14,7 +14,7 @@ export function Header() {
   const router = useRouter();
 
   const handleSignin = () => {
-    router.push('/signin');
+    router.push('/auth');
   }
 
   useEffect(() => {
@@ -117,7 +117,7 @@ export function Header() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M17 7H7M17 7V17" />
             </svg>
           </button>
-          <button className="px-6 py-2 rounded-full bg-primary/80 backdrop-blur-sm text-primary-foreground font-normal text-sm transition-all duration-300 hover:bg-primary/90 cursor-pointer h-10 flex items-center z-10 shadow-lg border border-white/20">
+          <button onClick={handleSignin} className="px-6 py-2 rounded-full bg-primary/80 backdrop-blur-sm text-primary-foreground font-normal text-sm transition-all duration-300 hover:bg-primary/90 cursor-pointer h-10 flex items-center z-10 shadow-lg border border-white/20">
             Join DevRank
           </button>
 

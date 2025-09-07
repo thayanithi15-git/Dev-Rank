@@ -1,8 +1,12 @@
 import {
+  BarChart3,
+  BookmarkCheck,
   CalendarDays,
   CloudDownload,
   Database,
+  Edit3,
   File,
+  FileText,
   FolderOpen,
   HelpCircle,
   History,
@@ -10,9 +14,11 @@ import {
   PartyPopper,
   RefreshCw,
   Settings,
+  Settings2,
   ShieldEllipsis,
   UserCheck,
   UserCog,
+  Users,
   Wrench
 } from "lucide-react";
 
@@ -55,7 +61,7 @@ export const generateSidebarData = (): SidebarData => {
     ],
     navGroups: [
       {
-        title: "Overview",
+        title: "Insights",
         items: [
           {
             title: "Dashboard",
@@ -63,88 +69,60 @@ export const generateSidebarData = (): SidebarData => {
             icon: LayoutDashboard,
           },
           {
-            title: "Top Rankers",
-            url: "/top-rankers",
-            icon: Wrench,
+            title: "Rank Analysis",
+            url: "/dashboard/rank-analysis",
+            icon: BarChart3,
           },
           {
-            title: "Profile Analyzer",
-            url: "/profile-analyzer",
-            icon: FolderOpen,
-          },
-          // {
-          //   title: "Part Programs",
-          //   url: "/dashboard/part-programs",
-          //   icon: File,
-          // },
-          // {
-          //   title: "File Preview",
-          //   url: "/dashboard/file-preview",
-          //   icon: FolderOpen,
-          // },
-          // {
-          //   title: "Document Library",
-          //   url: "/dashboard/documents",
-          //   icon: FolderOpen,
-          // },
-          // {
-          //   title: "Backup Center",
-          //   url: "/dashboard/backups",
-          //   icon: Database,
-          // },
-          // ...(appRole === "admin" || appRole === "super admin"
-          //   ? [
-          //     {
-          //       title: "Backup Center",
-          //       url: "/dashboard/backups",
-          //       icon: Database,
-          //     },
-          //   ]
-          //   : []),
-        ],
-      },
-      {
-        title: "Management Console",
-        items: [
-          // ...(appRole === "admin" || appRole === "super admin"
-          //   ? [
-          //     {
-          //       title: "User Access Control",
-          //       url: "/dashboard/users-manage",
-          //       icon: UserCog,
-          //     },
-              // {
-              //   title: "System Reports",
-              //   url: "/dashboard/reports",
-              //   icon: CalendarDays,
-              // },
-            //   {
-            //     title: "Resource Allocation",
-            //     url: "/dashboard/resource-allocation",
-            //     icon: UserCheck,
-            //   },
-            // ]
-            // : []),
-          {
-            title: "Activity Tracking",
-            url: "activity-track",
-            icon: History,
+            title: "Profile Insights",
+            url: "/dashboard/profile-insights",
+            icon: UserCheck,
           },
         ],
       },
       {
-        title: "Assistance",
+        title: "Developer Tools",
         items: [
+          {
+            title: "Profile Builder",
+            url: "/dashboard/profile-builder",
+            icon: Edit3,
+          },
+          {
+            title: "Portfolio Preview",
+            url: "/dashboard/portfolio-preview",
+            icon: FileText,
+          },
+        ],
+      },
+      // {
+      //   title: "Recruiter Console",
+      //   items: [
+      //     {
+      //       title: "Talent Search",
+      //       url: "/dashboard/talent-search",
+      //       icon: Users,
+      //     },
+      //     {
+      //       title: "Shortlist",
+      //       url: "/dashboard/shortlist",
+      //       icon: BookmarkCheck,
+      //     },
+      //   ],
+      // },
+      {
+        title: "Support & Settings",
+        items: [
+          {
+            title: "Account Settings",
+            url: "/dashboard/settings",
+            icon: Settings,
+          },
           {
             title: "Help Center",
-            url: "help-center",
+            url: "/dashboard/help-center",
             icon: HelpCircle,
           },
-          // {
-          //   title: "Sync Monitor",
-          //   url: "/dashboard/sync-status",
-          //   icon: RefreshCw,
-          // },
         ],
       },
     ]
@@ -175,8 +153,8 @@ export const sidebarData: SidebarData = {
           icon: LayoutDashboard,
         },
         {
-          title: "Machine Overview",
-          url: "/dashboard/machines-overview",
+          title: "Rank Analyze",
+          url: "/dashboard/rank-analyze",
           icon: Wrench,
         },
         {
@@ -210,9 +188,9 @@ export const sidebarData: SidebarData = {
           icon: HelpCircle,
         },
         {
-          title: "Sync Monitor",
-          url: "/dashboard/sync-status",
-          icon: RefreshCw,
+          title: "Settings",
+          url: "/dashboard/settings",
+          icon: Settings2,
         },
       ],
     },

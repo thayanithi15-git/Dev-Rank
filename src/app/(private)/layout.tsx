@@ -1,42 +1,41 @@
-import type { Metadata } from "next";
-import { ReactNode } from "react";
-import { redirect } from "next/navigation";
-import { SidebarProvider } from "@/components/ui/sidebar";
+"use client";
 import { AppSidebar } from "@/components/ui/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-// import { getServerSession } from "next-auth
-// "; // If using next-auth
+import { useRouter } from "next/navigation";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { useEffect, useState } from "react";
 
-// Example: define metadata for private pages
-export const metadata: Metadata = {
-    // title: "Private Area | Dev Rank",
-    // description: "Authenticated user area",
-};
+interface Props {
+  children: React.ReactNode;
+}
 
-export default async function PrivateLayout({ children }: { children: ReactNode }) {
-    // ✅ Example auth check (adjust based on your auth system)
-    //   const session = await getServerSession();
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
-    //   if (!session) {
-    //     redirect("/signin"); // 🚀 redirect to login if not authenticated
-    //   }
+// ⬇️ This one actually applies the font
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
-    return (
-        <>
-            <SidebarProvider defaultOpen={true}>
-                <AppSidebar />
-                <div
-                    id='content'
-                    className={cn(
-                        'flex-1 flex flex-col',
-                        'bg-background',
-                        'min-h-screen',
-                        'relative',
-                    )}
-                >
-                    {children}
-                </div>
-            </SidebarProvider>
-        </>
-    );
+export default function PrivateLayout({ children }: Props) {
+  const router = useRouter();
+
+  return (
+    <div className={cn(poppins.className, "antialiased min-h-screen bg-background")}>
+      <SidebarProvider defaultOpen>
+        <AppSidebar />
+        <div
+          id="content"
+          className={cn(
+            "flex-1 flex flex-col",
+            "min-h-screen relative"
+          )}
+        >
+          {children}
+        </div>
+      </SidebarProvider>
+    </div>
+  );
 }
