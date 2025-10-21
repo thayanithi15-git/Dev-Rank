@@ -86,7 +86,6 @@ export default function AuthPage() {
         e.preventDefault();
         const success = await signUp();
         if (success) {
-            // Switch to sign in and pre-fill email
             setIsSignIn(true);
             setSignInEmail(signUpEmail);
             resetSignUp();
@@ -207,7 +206,6 @@ export default function AuthPage() {
                             </motion.div>
                             {/* )} */}
                         </div>
-
                         <div className="mt-8"></div>
                     </motion.div>
 
@@ -376,7 +374,6 @@ export default function AuthPage() {
                                         </div>
 
                                         <div className="grid grid-cols-2 gap-5">
-
                                             <div className="space-y-2">
                                                 <Label htmlFor="signup-username" className="text-sm font-medium">
                                                     Username
@@ -405,7 +402,6 @@ export default function AuthPage() {
                                                     style={{ borderColor: "var(--color-border)" }}
                                                 />
                                             </div>
-
                                         </div>
 
                                         <div className="space-y-2">
