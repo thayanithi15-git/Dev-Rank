@@ -39,7 +39,7 @@ html {
         `}</style>
       </head>
       <body className={`antialiased ${figtree.variable}`}>
-        <GlobalNotification />
+        {/* <GlobalNotification /> */}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

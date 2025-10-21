@@ -14,7 +14,7 @@ export function Header() {
   const router = useRouter();
 
   const handleSignin = () => {
-    router.push('/auth');
+    router.push('/auth/access');
   }
 
   useEffect(() => {
