@@ -87,7 +87,7 @@ export default function AuthPage() {
         const success = await signUp();
         if (success) {
             setIsSignIn(true);
-            setSignInEmail(signUpEmail);
+            // setSignInEmail(signUpEmail);
             resetSignUp();
         }
     };
@@ -242,8 +242,8 @@ export default function AuthPage() {
                                             </Label>
                                             <Input
                                                 id="signup-email"
-                                                type="email"
-                                                value={signUpEmail}
+                                                type="email" 
+                                                value={signInEmail}
                                                 onChange={(e) => setSignInEmail(e.target.value)}
                                                 placeholder="you@devrank.com"
                                                 className="h-12 rounded-xl"

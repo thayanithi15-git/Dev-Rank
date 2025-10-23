@@ -1,10 +1,11 @@
 "use client";
-import { AppSidebar } from "@/components/ui/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+// import { AppSidebar } from "@/components/ui/app-sidebar";
+// import { SidebarProvider } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import { useEffect, useState } from "react";
+import LayoutWrapper from "@/components/layout/layout";
 
 interface Props {
   children: React.ReactNode;
@@ -24,8 +25,9 @@ export default function PrivateLayout({ children }: Props) {
 
   return (
     <div className={cn(poppins.className, "antialiased min-h-screen bg-background")}>
-      <SidebarProvider defaultOpen>
-        <AppSidebar />
+      {/* <SidebarProvider defaultOpen>
+        <AppSidebar /> */}
+      <LayoutWrapper>
         <div
           id="content"
           className={cn(
@@ -35,7 +37,8 @@ export default function PrivateLayout({ children }: Props) {
         >
           {children}
         </div>
-      </SidebarProvider>
+      </LayoutWrapper>
+      {/* </SidebarProvider> */}
     </div>
   );
 }

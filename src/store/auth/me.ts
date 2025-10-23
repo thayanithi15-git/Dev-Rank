@@ -28,7 +28,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     checkAuth: async () => {
         const token = typeof window !== "undefined" && localStorage.getItem("token");
-        
+
         if (!token) {
             set({ isAuthenticated: false, user: null });
             return;
@@ -67,7 +67,8 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     fetchMe: async () => {
         const token = typeof window !== "undefined" && localStorage.getItem("token");
-        
+        const { showToast } = useToastStore.getState();
+
         if (!token) {
             return;
         }
@@ -77,6 +78,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         try {
             const response = await api.get("/auth/me");
             const { user } = response.data;
+            showToast("Fetched User Details", `Welcome ${user.username}`, "success");
 
             set({
                 user,
@@ -85,8 +87,7 @@ export const useAuthStore = create<AuthState>((set) => ({
             });
         } catch (error: any) {
             console.error("Fetch me error:", error);
-            const { showToast } = useToastStore.getState();
-            
+
             if (error.response?.status === 401) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("userId");
@@ -110,12 +111,13 @@ export const useAuthStore = create<AuthState>((set) => ({
 
     logout: () => {
         const { showToast } = useToastStore.getState();
-        
+
         localStorage.removeItem("token");
         localStorage.removeItem("userId");
         localStorage.removeItem("username");
         localStorage.removeItem("userEmail");
         localStorage.removeItem("userRole");
+        localStorage.clear();
 
         set({
             user: null,

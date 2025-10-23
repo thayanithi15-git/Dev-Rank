@@ -30,7 +30,7 @@ export function Toast({ message, description, type = "success", onClose }: Toast
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -50, opacity: 0, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-6 right-6 z-50 px-5 py-4 rounded-xl shadow-2xl max-w-sm"
+            className="fixed top-6 right-6 z-100 px-5 py-4 rounded-xl shadow-2xl max-w-sm"
             style={{
                 background: colors[type].bg,
                 color: colors[type].text,
