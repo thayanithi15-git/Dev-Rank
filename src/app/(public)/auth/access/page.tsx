@@ -40,6 +40,7 @@ export default function AuthPage() {
         setPassword: setSignInPassword,
         signIn,
         reset: resetSignIn,
+        user,
     } = useSignInStore();
 
     // Sign Up store
@@ -77,7 +78,11 @@ export default function AuthPage() {
         e?.preventDefault();
         const success = await signIn();
         if (success) {
-            router.push("/dashboard");
+            if(user?.role == 'admin' || 'recruiter'){
+                router.push("/admin");
+            } else{
+                router.push("/dashboard");
+            }
             resetSignIn();
         }
     };

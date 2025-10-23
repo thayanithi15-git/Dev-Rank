@@ -33,7 +33,8 @@ import {
     Plus,
     NotepadTextDashed,
     UserCheck,
-    Edit3
+    Edit3,
+    HighlighterIcon
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -96,24 +97,6 @@ const userSections: SidebarSection[] = [
             },
         ],
     },
-    // {
-    //     title: "Skills & Portfolio",
-    //     items: [
-    //         // {
-    //         //     icon: Target,
-    //         //     label: "Skills Portfolio",
-    //         //     href: "/dashboard/skills",
-    //         //     description: "Manage and showcase your skills",
-    //         // },
-    //         // {
-    //         //     icon: TrendingUp,
-    //         //     label: "Career Pathways",
-    //         //     href: "/dashboard/pathways",
-    //         //     description: "NSQF-aligned career progression",
-    //         // },
-
-    //     ],
-    // },
     {
         title: "Developer Tools",
         items: [
@@ -158,14 +141,14 @@ const recruiterSections: SidebarSection[] = [
             {
                 icon: LayoutDashboard,
                 label: "Dashboard",
-                href: "/dashboard",
-                description: "Recruitment insights and analytics",
+                href: "/admin",
+                description: "Hiring metrics and trends",
             },
             {
                 icon: BarChart3,
-                label: "Analytics",
-                href: "/dashboard/analytics",
-                description: "Hiring metrics and trends",
+                label: "Rank Analysis",
+                href: "/admin/rank-analysis",
+                description: "Badges, certificates, and milestones",
             },
         ],
     },
@@ -174,75 +157,37 @@ const recruiterSections: SidebarSection[] = [
         items: [
             {
                 icon: Users,
-                label: "Candidate Directory",
-                href: "/dashboard/candidates",
+                label: "Users Directory",
+                href: "/admin/users-directory",
                 description: "Browse all verified profiles",
             },
-            // {
-            //     icon: Shield,
-            //     label: "Verify Credentials",
-            //     href: "/dashboard/verify",
-            //     description: "Instant credential verification",
-            // },
         ],
     },
     // {
-    //     title: "Pipeline Management",
+    //     title: "Company & Tools",
     //     items: [
-    // {
-    //     icon: Star,
-    //     label: "Shortlisted",
-    //     href: "/dashboard/shortlisted",
-    //     badge: "24",
-    //     description: "Your shortlisted candidates",
-    // },
-    // {
-    //     icon: MessageSquare,
-    //     label: "Messages",
-    //     href: "/dashboard/messages",
-    //     badge: "5",
-    //     description: "Candidate communications",
-    // },
-    // {
-    //     icon: Activity,
-    //     label: "Active Jobs",
-    //     href: "/dashboard/jobs",
-    //     badge: "12",
-    //     description: "Manage job postings",
-    // },
+    //         {
+    //             icon: Building,
+    //             label: "Company Profile",
+    //             href: "/admin/company",
+    //             description: "Manage company information",
+    //         },
+    //         {
+    //             icon: Plus,
+    //             label: "Post New Job",
+    //             href: "/admin/jobs",
+    //             description: "Create job listing",
+    //         },
     //     ],
     // },
     {
-        title: "Company & Tools",
-        items: [
-            {
-                icon: Building,
-                label: "Company Profile",
-                href: "/dashboard/company",
-                description: "Manage company information",
-            },
-            {
-                icon: Plus,
-                label: "Post New Job",
-                href: "/dashboard/jobs",
-                description: "Create job listing",
-            },
-        ],
-    },
-    {
         title: "Support",
         items: [
-            // {
-            //     icon: HelpCircle,
-            //     label: "Help Center",
-            //     href: "/dashboard/help",
-            //     description: "FAQs and support",
-            // },
             {
-                icon: Settings,
-                label: "Settings",
-                href: "/dashboard/settings",
-                description: "Account preferences",
+                icon: HelpCircle,
+                label: "Help Center",
+                href: "/admin/help-center",
+                description: "FAQs and support",
             },
         ],
     },
@@ -295,7 +240,7 @@ const Sidebar: React.FC = () => {
 
     // ✅ Decide sidebar sections based on role
     const sections =
-        user?.role?.toLowerCase() === "recruiter"
+        user?.role?.toLowerCase() === "recruiter" || "admin"
             ? recruiterSections
             : userSections;
 
@@ -459,7 +404,7 @@ const Sidebar: React.FC = () => {
                                                     : "bg-primary/10 text-primary border-primary/20"
                                             )}
                                         >
-                                            {user?.role === "recruiter" ? "Recruiter" : "Learner"}
+                                            {user?.role === "recruiter" || "admin" ? "Recruiter" : "Learner"}
                                         </Badge>
                                     </div>
                                 )}

@@ -29,6 +29,7 @@ const Header: React.FC<HeaderProps> = ({
 }) => {
     const { isOpen, toggleSidebar } = useSidebarStore();
     const { isDark, toggleTheme } = useThemeStore();
+    const [ role, setRole ] = useState('user');
 
     const [sessionData, setSessionData] = useState<any>(null);
     const {
@@ -67,6 +68,12 @@ const Header: React.FC<HeaderProps> = ({
             .slice(0, 2);
     };
 
+    useEffect(() => {
+        const role = localStorage.getItem("userRole");
+        if (role) {
+            setRole(role);
+        }
+    }, []);
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
@@ -85,7 +92,7 @@ const Header: React.FC<HeaderProps> = ({
 
                     <div>
                         <span className="text-xl font-bold text-primary">{title}</span>
-                        <div className="text-xs text-muted-foreground">{subtitle}</div>
+                        <div className="text-xs text-muted-foreground">{role=='user' ? 'Learner Portal' : 'Recruiter Portal'}</div>
                     </div>
                 </div>
 
