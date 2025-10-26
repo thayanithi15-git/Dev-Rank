@@ -77,6 +77,18 @@ export default function AccountSettingsPage() {
   const [showEmail, setShowEmail] = useState(false);
   const [showActivity, setShowActivity] = useState(true);
 
+  const [username, setUsername] = useState("User");
+  const [userEmail, setUserEmail] = useState("user@example.com");
+
+  useEffect(() => {
+    // Only runs in the browser
+    const storedName = localStorage.getItem("username");
+    const storedEmail = localStorage.getItem("userEmail");
+
+    if (storedName) setUsername(storedName);
+    if (storedEmail) setUserEmail(storedEmail);
+  }, []);
+
   const {
     currentPassword,
     newPassword,
@@ -175,12 +187,8 @@ export default function AccountSettingsPage() {
                 <AvatarFallback>DD</AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm truncate">
-                  {localStorage.getItem('username') || 'User'}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {localStorage.getItem('userEmail') || 'user@example.com'}
-                </p>
+                <p className="font-medium text-sm truncate">{username}</p>
+                <p className="text-xs text-muted-foreground truncate">{userEmail}</p>
               </div>
             </div>
           </CardContent>
