@@ -449,14 +449,14 @@ export default function RankAnalysisPage() {
 
   return (
     <div className="min-h-screen bg-background" suppressHydrationWarning>
-        <Header title='Developer Rankings' />
+      <Header title='Developer Rankings' />
 
       <div className="w-full mx-auto p-4 lg:p-6 space-y-6">
 
 
         {/* Time Period Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          
+
 
           <TabsContent value={activeTab} className="space-y-6">
             {/* Loading State */}
@@ -493,82 +493,86 @@ export default function RankAnalysisPage() {
             {!isLoading && !error && renderTopPerformers()}
 
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
-            {/* <TabsList className="grid w-full lg:w-auto grid-cols-3">
+              {/* <TabsList className="grid w-full lg:w-auto grid-cols-3">
               <TabsTrigger value="daily">Daily</TabsTrigger>
               <TabsTrigger value="weekly">Weekly</TabsTrigger>
               <TabsTrigger value="monthly">Monthly</TabsTrigger>
             </TabsList> */}
 
-            {/* Advanced Filters */}
-            <div className="flex justify-between w-full gap-3">
-              <div className="flex flex-wrap gap-3">
-                <div className="relative">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search developers..."
-                    className="pl-10 w-64"
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    suppressHydrationWarning
-                  />
+              {/* Advanced Filters */}
+              {!isLoading && !error && (
+                <div className="flex justify-between w-full gap-3">
+                  <div className="flex flex-wrap gap-3">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search developers..."
+                        className="pl-10 w-64"
+                        value={searchInput}
+                        onChange={(e) => setSearchInput(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        suppressHydrationWarning
+                      />
+                    </div>
+
+                    <Button variant="outline" size="default" onClick={handleSearch} suppressHydrationWarning>
+                      Search
+                    </Button>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3">
+                    <Select value={filters.platform ?? "all"} onValueChange={(value) => setPlatform(value === "all" ? "" : value)}>
+                      <SelectTrigger className="w-40" suppressHydrationWarning>
+                        <SelectValue placeholder="Platform" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Platforms</SelectItem>
+                        <SelectItem value="leetcode">LeetCode</SelectItem>
+                        <SelectItem value="codeforces">Codeforces</SelectItem>
+                        <SelectItem value="github">GitHub</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Select value={filters.country ?? "all"} onValueChange={(value) => setCountry(value === "all" ? "" : value)}>
+                      <SelectTrigger className="w-40" suppressHydrationWarning>
+                        <SelectValue placeholder="Country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Countries</SelectItem>
+                        <SelectItem value="US">United States</SelectItem>
+                        <SelectItem value="IN">India</SelectItem>
+                        <SelectItem value="GB">United Kingdom</SelectItem>
+                        <SelectItem value="CA">Canada</SelectItem>
+                        <SelectItem value="SG">Singapore</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Select value={filters.sortBy ?? "totalScore"} onValueChange={setSortBy}>
+                      <SelectTrigger className="w-32" suppressHydrationWarning>
+                        <SelectValue placeholder="Sort by" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="totalScore">Score</SelectItem>
+                        <SelectItem value="totalProblemsSolved">Problems</SelectItem>
+                        <SelectItem value="platformsCount">Platforms</SelectItem>
+                        <SelectItem value="createdAt">Join Date</SelectItem>
+                      </SelectContent>
+                    </Select>
+
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSortOrder(filters.sortOrder === 'asc' ? 'desc' : 'asc')}
+                      suppressHydrationWarning
+                    >
+                      {filters.sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
+                    </Button>
+                  </div>
                 </div>
+              )}
 
-                <Button variant="outline" size="default" onClick={handleSearch} suppressHydrationWarning>
-                  Search
-                </Button>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <Select value={filters.platform ?? "all"} onValueChange={(value) => setPlatform(value === "all" ? "" : value)}>
-                  <SelectTrigger className="w-40" suppressHydrationWarning>
-                    <SelectValue placeholder="Platform" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Platforms</SelectItem>
-                    <SelectItem value="leetcode">LeetCode</SelectItem>
-                    <SelectItem value="codeforces">Codeforces</SelectItem>
-                    <SelectItem value="github">GitHub</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={filters.country ?? "all"} onValueChange={(value) => setCountry(value === "all" ? "" : value)}>
-                  <SelectTrigger className="w-40" suppressHydrationWarning>
-                    <SelectValue placeholder="Country" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Countries</SelectItem>
-                    <SelectItem value="US">United States</SelectItem>
-                    <SelectItem value="IN">India</SelectItem>
-                    <SelectItem value="GB">United Kingdom</SelectItem>
-                    <SelectItem value="CA">Canada</SelectItem>
-                    <SelectItem value="SG">Singapore</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={filters.sortBy ?? "totalScore"} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-32" suppressHydrationWarning>
-                    <SelectValue placeholder="Sort by" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="totalScore">Score</SelectItem>
-                    <SelectItem value="totalProblemsSolved">Problems</SelectItem>
-                    <SelectItem value="platformsCount">Platforms</SelectItem>
-                    <SelectItem value="createdAt">Join Date</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSortOrder(filters.sortOrder === 'asc' ? 'desc' : 'asc')}
-                  suppressHydrationWarning
-                >
-                  {filters.sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
-                </Button>
-              </div>
             </div>
-          </div>
+
 
             {/* Rankings Table */}
             {!isLoading && !error && users?.length > 0 && (
