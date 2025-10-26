@@ -240,7 +240,7 @@ const Sidebar: React.FC = () => {
 
     // ✅ Decide sidebar sections based on role
     const sections =
-        user?.role?.toLowerCase() === "recruiter" || "admin"
+        user?.role?.toLowerCase() === "recruiter" || user?.role?.toLowerCase() === "admin"
             ? recruiterSections
             : userSections;
 

@@ -78,7 +78,7 @@ export default function AuthPage() {
         e?.preventDefault();
         const success = await signIn();
         if (success) {
-            if(user?.role == 'admin' || 'recruiter'){
+            if(user?.role == 'admin' || user?.role == 'recruiter'){
                 router.push("/admin");
             } else{
                 router.push("/dashboard");
