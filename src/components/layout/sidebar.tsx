@@ -342,7 +342,7 @@ const Sidebar: React.FC = () => {
                                     Dev Rank
                                 </h1>
                                 <p className="text-xs text-muted-foreground w-full truncate">
-                                    {user?.role === "recruiter"
+                                    {user?.role === "recruiter" || user?.role === "admin"
                                         ? "Talent Discovery Portal"
                                         : "Talent Discovery Portal"
                                     }
@@ -399,12 +399,12 @@ const Sidebar: React.FC = () => {
                                             variant="outline"
                                             className={cn(
                                                 "text-xs mt-1 px-2 py-0.5 rounded-md",
-                                                user?.role === "recruiter"
+                                                user?.role === "recruiter" || user?.role === "admin"
                                                     ? "bg-purple-500/10 text-purple-700 dark:text-purple-400 border-purple-500/20"
                                                     : "bg-primary/10 text-primary border-primary/20"
                                             )}
                                         >
-                                            {user?.role === "recruiter" || "admin" ? "Recruiter" : "Learner"}
+                                            {user?.role === "recruiter" || user?.role === "admin" ? "Recruiter" : "Learner"}
                                         </Badge>
                                     </div>
                                 )}
@@ -478,12 +478,12 @@ const Sidebar: React.FC = () => {
                                         variant="outline"
                                         className={cn(
                                             "text-xs mt-1 px-2 py-0.5",
-                                            user?.role === "recruiter"
+                                            user?.role === "recruiter" || user?.role === "admin"
                                                 ? "bg-purple-500/10 text-purple-700 dark:text-purple-400"
                                                 : "bg-primary/10 text-primary"
                                         )}
                                     >
-                                        {user?.role === "recruiter" ? "Recruiter Account" : "Learner Account"}
+                                        {user?.role === "recruiter" || user?.role === "admin" ? "Recruiter Account" : "Learner Account"}
                                     </Badge>
                                 </div>
                             </div>
@@ -493,7 +493,7 @@ const Sidebar: React.FC = () => {
                                 <div className="flex justify-between items-center py-1">
                                     <span className="text-muted-foreground">Account Type:</span>
                                     <span className="font-medium text-xs text-foreground">
-                                        {user?.role === "recruiter" ? "Recruiter" : "Learner"}
+                                        {user?.role === "recruiter" || user?.role === "admin" ? "Recruiter" : "Learner"}
                                     </span>
                                 </div>
                                 <div className="flex justify-between items-center py-1">
@@ -524,7 +524,7 @@ const Sidebar: React.FC = () => {
                                         </div>
                                     </>
                                 )}
-                                {user?.role === "recruiter" && (
+                                {user?.role === "recruiter" || user?.role === "admin" && (
                                     <>
                                         <Separator className="my-2" />
                                         <div className="flex justify-between items-center py-1">
@@ -555,7 +555,7 @@ const Sidebar: React.FC = () => {
                                     size="sm"
                                 >
                                     <Eye className="mr-2 h-4 w-4" />
-                                    {user?.role === "recruiter" ? "View Company Profile" : "View Profile"}
+                                    {user?.role === "recruiter" || user?.role === "admin" ? "View Company Profile" : "View Profile"}
                                 </Button>
                             </div>
 
