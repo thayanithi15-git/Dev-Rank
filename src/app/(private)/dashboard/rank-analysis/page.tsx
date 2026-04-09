@@ -199,7 +199,7 @@ export default function RankAnalysisPage() {
                   <Avatar className={`${avatarSize} ring-4 ${actualRank === 1 ? 'ring-yellow-400' : actualRank === 2 ? 'ring-gray-300' : 'ring-orange-400'}`}>
                     <AvatarImage src={user.avatar} />
                     <AvatarFallback className="text-lg font-bold">
-                      {user.username.substring(0, 2).toUpperCase()}
+                      {user?.username?.substring(0, 2)?.toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="text-center">
@@ -269,7 +269,7 @@ export default function RankAnalysisPage() {
                   <Avatar className="w-24 h-24 ring-4 ring-border">
                     <AvatarImage src={selectedUser.avatar} />
                     <AvatarFallback className="text-2xl font-bold">
-                      {selectedUser.username.substring(0, 2).toUpperCase()}
+                      {selectedUser?.username?.substring(0, 2)?.toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </div>
@@ -631,7 +631,7 @@ export default function RankAnalysisPage() {
                                   <Avatar className="w-10 h-10">
                                     <AvatarImage src={user.avatar} />
                                     <AvatarFallback>
-                                      {user.username.substring(0, 2).toUpperCase()}
+                                      {user?.username?.substring(0, 2)?.toUpperCase()}
                                     </AvatarFallback>
                                   </Avatar>
                                   {/* Mobile rank indicator */}
